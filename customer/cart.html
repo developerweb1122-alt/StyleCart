@@ -1,0 +1,2127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>StyleCart - Cart</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #fff7f9;
+            color: #222;
+        }
+
+        /* ================= HEADER ================= */
+
+        header {
+            background: white;
+            padding: 18px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: bold;
+            color: #ff4d6d;
+            cursor: pointer;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 7px;
+            background: #ff4d6d;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .nav-btn:hover {
+            background: #e83e5b;
+        }
+
+        /* ================= CONTAINER ================= */
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: auto;
+            padding: 40px 0;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .page-title h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .page-title p {
+            color: #777;
+        }
+
+        /* ================= CART ================= */
+
+        .cart-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+        }
+
+        .cart-items {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 18px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        /* ================= IMAGE ================= */
+
+        .item-image {
+            width: 90px;
+            height: 90px;
+            background: #fff0f4;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-placeholder {
+            font-size: 40px;
+        }
+
+        /* ================= DETAILS ================= */
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-details h3 {
+            margin-bottom: 6px;
+        }
+
+        .item-category {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .item-size {
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .item-price {
+            color: #ff4d6d;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* ================= QUANTITY ================= */
+
+        .quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity button {
+            width: 30px;
+            height: 30px;
+            border: none;
+            border-radius: 5px;
+            background: #ff4d6d;
+            color: white;
+            cursor: pointer;
+            font-size: 17px;
+        }
+
+        .quantity button:hover {
+            background: #e83e5b;
+        }
+
+        .quantity span {
+            min-width: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* ================= REMOVE ================= */
+
+        .remove-btn {
+            border: none;
+            background: #222;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .remove-btn:hover {
+            background: #555;
+        }
+
+        /* ================= SUMMARY ================= */
+
+        .summary {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            height: fit-content;
+        }
+
+        .summary h2 {
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .discount-row {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        .total {
+            font-size: 22px;
+            font-weight: bold;
+            color: #ff4d6d;
+            margin-top: 15px;
+        }
+
+        /* ================= COUPON ================= */
+
+        .coupon-box {
+            margin: 20px 0;
+            padding: 15px;
+            background: #fff7f9;
+            border: 1px solid #ffd6df;
+            border-radius: 10px;
+        }
+
+        .coupon-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .coupon-input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .coupon-input {
+            flex: 1;
+            min-width: 0;
+            padding: 11px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .coupon-input:focus {
+            border-color: #ff4d6d;
+        }
+
+        .coupon-btn {
+            padding: 11px 15px;
+            border: none;
+            border-radius: 6px;
+            background: #ff4d6d;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .coupon-btn:hover {
+            background: #e83e5b;
+        }
+
+        .coupon-btn:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        .coupon-message {
+            margin-top: 10px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .coupon-success {
+            color: #15803d;
+        }
+
+        .coupon-error {
+            color: #dc2626;
+        }
+
+        .remove-coupon {
+            margin-top: 8px;
+            border: none;
+            background: transparent;
+            color: #dc2626;
+            cursor: pointer;
+            font-size: 12px;
+            display: none;
+        }
+
+        /* ================= BUTTONS ================= */
+
+        .checkout-btn {
+            width: 100%;
+            padding: 13px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 7px;
+            background: #ff4d6d;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .checkout-btn:hover {
+            background: #e83e5b;
+        }
+
+        .clear-btn {
+            width: 100%;
+            padding: 11px;
+            margin-top: 10px;
+            border: 1px solid #ff4d6d;
+            border-radius: 7px;
+            background: white;
+            color: #ff4d6d;
+            cursor: pointer;
+        }
+
+        .clear-btn:hover {
+            background: #fff0f3;
+        }
+
+        /* ================= EMPTY CART ================= */
+
+        .empty-cart {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .empty-cart-icon {
+            font-size: 70px;
+            margin-bottom: 15px;
+        }
+
+        .empty-cart h2 {
+            margin-bottom: 10px;
+        }
+
+        .empty-cart p {
+            color: #777;
+            margin-bottom: 20px;
+        }
+
+        /* ================= LOADING ================= */
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #777;
+            font-size: 20px;
+        }
+
+        /* ================= ERROR ================= */
+
+        .error-box {
+            text-align: center;
+            padding: 50px 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .error-box h2 {
+            color: #ff4d6d;
+            margin-bottom: 10px;
+        }
+
+        .error-box p {
+            color: #777;
+            margin-bottom: 20px;
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 750px) {
+
+            .cart-container {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .cart-item {
+                flex-wrap: wrap;
+            }
+
+            .coupon-input-row {
+                flex-direction: column;
+            }
+
+            .coupon-btn {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+    <div
+        class="logo"
+        onclick="goHome()"
+    >
+        StyleCart
+    </div>
+
+
+    <div class="nav-buttons">
+
+        <button
+            class="nav-btn"
+            onclick="goProducts()"
+        >
+            🛍 Products
+        </button>
+
+
+        <button
+            class="nav-btn"
+            onclick="goHome()"
+        >
+            🏠 Home
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<!-- ================= MAIN ================= -->
+
+<div class="container">
+
+
+    <div class="page-title">
+
+        <h1>
+            🛒 My Cart
+        </h1>
+
+        <p>
+            Review your selected products
+        </p>
+
+    </div>
+
+
+    <!-- LOADING -->
+
+    <div
+        id="loading"
+        class="loading"
+    >
+
+        Loading cart...
+
+    </div>
+
+
+    <!-- ERROR -->
+
+    <div
+        id="errorBox"
+        class="error-box"
+        style="display:none;"
+    >
+
+        <h2>
+            Unable to Load Cart
+        </h2>
+
+        <p id="errorMessage">
+            Please try again.
+        </p>
+
+        <button
+            class="nav-btn"
+            onclick="loadCart()"
+        >
+            Try Again
+        </button>
+
+    </div>
+
+
+    <!-- CART -->
+
+    <div
+        id="cartContent"
+        class="cart-container"
+        style="display:none;"
+    >
+
+
+        <!-- CART ITEMS -->
+
+        <div
+            class="cart-items"
+            id="cartItems"
+        >
+
+        </div>
+
+
+        <!-- SUMMARY -->
+
+        <div
+            class="summary"
+            id="cartSummary"
+        >
+
+            <h2>
+                Order Summary
+            </h2>
+
+
+            <div class="summary-row">
+
+                <span>
+                    Items
+                </span>
+
+                <span id="totalItems">
+                    0
+                </span>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>
+                    Subtotal
+                </span>
+
+                <span id="subtotal">
+                    ₹0.00
+                </span>
+
+            </div>
+
+
+            <!-- ================= COUPON ================= -->
+
+            <div class="coupon-box">
+
+                <div class="coupon-title">
+                    🎟️ Apply Coupon
+                </div>
+
+
+                <div class="coupon-input-row">
+
+                    <input
+                        type="text"
+                        id="couponCode"
+                        class="coupon-input"
+                        placeholder="Enter coupon code"
+                        autocomplete="off"
+                    >
+
+
+                    <button
+                        id="applyCouponButton"
+                        class="coupon-btn"
+                        onclick="applyCoupon()"
+                    >
+                        Apply
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="couponMessage"
+                    class="coupon-message"
+                ></div>
+
+
+                <button
+                    id="removeCouponButton"
+                    class="remove-coupon"
+                    onclick="removeCoupon()"
+                >
+                    Remove Coupon
+                </button>
+
+            </div>
+
+
+            <!-- DISCOUNT -->
+
+            <div
+                id="discountRow"
+                class="summary-row discount-row"
+                style="display:none;"
+            >
+
+                <span>
+                    Coupon Discount
+                </span>
+
+                <span id="discountAmount">
+                    -₹0.00
+                </span>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>
+                    Delivery
+                </span>
+
+                <span>
+                    FREE
+                </span>
+
+            </div>
+
+
+            <div class="summary-row total">
+
+                <span>
+                    Total
+                </span>
+
+                <span id="totalPrice">
+                    ₹0.00
+                </span>
+
+            </div>
+
+
+            <button
+                class="checkout-btn"
+                onclick="checkout()"
+            >
+                Proceed to Checkout
+            </button>
+
+
+            <button
+                class="clear-btn"
+                onclick="clearCart()"
+            >
+                Clear Cart
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+
+/* =====================================================
+   API URL
+===================================================== */
+
+const API_URL =
+    "http://127.0.0.1:5000/api";
+
+
+
+/* =====================================================
+   USER
+===================================================== */
+
+let savedUser = null;
+
+
+try {
+
+    savedUser =
+        JSON.parse(
+            localStorage.getItem(
+                "stylecartUser"
+            )
+        );
+
+} catch (error) {
+
+    savedUser = null;
+
+}
+
+
+
+/* =====================================================
+   CART
+===================================================== */
+
+let cart = [];
+
+
+/* =====================================================
+   COUPON VARIABLES
+===================================================== */
+
+let appliedCoupon = "";
+
+let appliedDiscount = 0;
+
+
+
+/* =====================================================
+   LOAD CART
+===================================================== */
+
+async function loadCart() {
+
+    const loading =
+        document.getElementById("loading");
+
+    const errorBox =
+        document.getElementById("errorBox");
+
+    const cartContent =
+        document.getElementById("cartContent");
+
+
+    loading.style.display = "block";
+
+    errorBox.style.display = "none";
+
+    cartContent.style.display = "none";
+
+
+    /* =========================
+       LOGIN CHECK
+    ========================= */
+
+    if (
+        !savedUser ||
+        !savedUser.user_id
+    ) {
+
+        loading.style.display = "none";
+
+        errorBox.style.display = "block";
+
+        document.getElementById(
+            "errorMessage"
+        ).innerText =
+            "Please login first.";
+
+        return;
+
+    }
+
+
+    try {
+
+        console.log(
+            "Loading cart for user:",
+            savedUser.user_id
+        );
+
+
+        const response =
+            await fetch(
+                `${API_URL}/cart/${savedUser.user_id}`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    }
+                }
+            );
+
+
+        console.log(
+            "Cart API Status:",
+            response.status
+        );
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Cart API Response:",
+            data
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Cart API failed."
+            );
+
+        }
+
+
+        /* =========================
+           RESPONSE FORMAT
+        ========================= */
+
+        if (
+            Array.isArray(data)
+        ) {
+
+            cart = data;
+
+        }
+
+        else if (
+            data &&
+            Array.isArray(data.cart)
+        ) {
+
+            cart = data.cart;
+
+        }
+
+        else if (
+            data &&
+            Array.isArray(data.data)
+        ) {
+
+            cart = data.data;
+
+        }
+
+        else {
+
+            cart = [];
+
+        }
+
+
+        console.log(
+            "Final Cart:",
+            cart
+        );
+
+
+        loading.style.display = "none";
+
+        cartContent.style.display = "grid";
+
+
+        displayCart();
+
+
+    } catch (error) {
+
+        console.error(
+            "Cart Loading Error:",
+            error
+        );
+
+
+        loading.style.display = "none";
+
+        cartContent.style.display = "none";
+
+        errorBox.style.display = "block";
+
+
+        document.getElementById(
+            "errorMessage"
+        ).innerText =
+            error.message ||
+            "Unable to load cart.";
+
+    }
+
+}
+
+
+
+/* =====================================================
+   DISPLAY CART
+===================================================== */
+
+function displayCart() {
+
+    const cartItems =
+        document.getElementById("cartItems");
+
+    const cartSummary =
+        document.getElementById("cartSummary");
+
+
+    if (!Array.isArray(cart)) {
+
+        cart = [];
+
+    }
+
+
+    /* =========================
+       EMPTY CART
+    ========================= */
+
+    if (cart.length === 0) {
+
+        cartItems.innerHTML = `
+
+            <div class="empty-cart">
+
+                <div class="empty-cart-icon">
+                    🛒
+                </div>
+
+                <h2>
+                    Your Cart is Empty
+                </h2>
+
+                <p>
+                    Add some products to your cart.
+                </p>
+
+                <button
+                    class="nav-btn"
+                    onclick="goProducts()"
+                >
+                    Start Shopping
+                </button>
+
+            </div>
+
+        `;
+
+
+        cartSummary.style.display = "none";
+
+
+        appliedCoupon = "";
+
+        appliedDiscount = 0;
+
+
+        updateSummary();
+
+
+        return;
+
+    }
+
+
+    cartSummary.style.display = "block";
+
+
+    cartItems.innerHTML = "";
+
+
+    /* =========================
+       CART ITEMS
+    ========================= */
+
+    cart.forEach(function(item) {
+
+        const div =
+            document.createElement("div");
+
+
+        div.className =
+            "cart-item";
+
+
+        const productName =
+            item.product_name ||
+            item.name ||
+            "Fashion Product";
+
+
+        const category =
+            item.category_name ||
+            item.category ||
+            "Fashion";
+
+
+        const image =
+            item.image_url ||
+            item.image ||
+            "";
+
+
+        const price =
+            Number(item.price) || 0;
+
+
+        const quantity =
+            Number(item.quantity) || 1;
+
+
+        const stock =
+            Number(item.stock) || 999;
+
+
+        const cartId =
+            item.cart_id ||
+            item.id;
+
+
+        let imageHTML;
+
+
+        if (image) {
+
+            imageHTML = `
+
+                <img
+                    src="${image}"
+                    alt="${productName}"
+                    onerror="showImagePlaceholder(this)"
+                >
+
+            `;
+
+        }
+
+        else {
+
+            imageHTML = `
+
+                <div class="image-placeholder">
+                    👕
+                </div>
+
+            `;
+
+        }
+
+
+        div.innerHTML = `
+
+            <div class="item-image">
+
+                ${imageHTML}
+
+            </div>
+
+
+            <div class="item-details">
+
+                <h3>
+                    ${productName}
+                </h3>
+
+
+                <div class="item-category">
+                    ${category}
+                </div>
+
+
+                <div class="item-size">
+
+                    Size:
+
+                    <strong>
+                        ${item.size || "N/A"}
+                    </strong>
+
+                </div>
+
+
+                <div class="item-price">
+
+                    ₹${price.toFixed(2)}
+
+                </div>
+
+
+                <div class="quantity">
+
+                    <button
+                        onclick="decreaseQuantity(${cartId})"
+                    >
+                        −
+                    </button>
+
+
+                    <span>
+                        ${quantity}
+                    </span>
+
+
+                    <button
+                        onclick="increaseQuantity(
+                            ${cartId},
+                            ${stock},
+                            ${quantity}
+                        )"
+                    >
+                        +
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="remove-btn"
+                onclick="removeItem(${cartId})"
+            >
+                Remove
+            </button>
+
+        `;
+
+
+        cartItems.appendChild(div);
+
+    });
+
+
+    updateSummary();
+
+}
+
+
+
+/* =====================================================
+   IMAGE PLACEHOLDER
+===================================================== */
+
+function showImagePlaceholder(
+    imageElement
+) {
+
+    imageElement.style.display = "none";
+
+
+    imageElement.parentElement.innerHTML = `
+
+        <div class="image-placeholder">
+            👕
+        </div>
+
+    `;
+
+}
+
+
+
+/* =====================================================
+   GET SUBTOTAL
+===================================================== */
+
+function getCartSubtotal() {
+
+    let subtotal = 0;
+
+
+    cart.forEach(function(item) {
+
+        const price =
+            Number(item.price) || 0;
+
+
+        const quantity =
+            Number(item.quantity) || 1;
+
+
+        subtotal +=
+            price * quantity;
+
+    });
+
+
+    return subtotal;
+
+}
+
+
+
+/* =====================================================
+   APPLY COUPON
+===================================================== */
+
+async function applyCoupon() {
+
+    const couponInput =
+        document.getElementById(
+            "couponCode"
+        );
+
+
+    const couponMessage =
+        document.getElementById(
+            "couponMessage"
+        );
+
+
+    const applyButton =
+        document.getElementById(
+            "applyCouponButton"
+        );
+
+
+    const code =
+        couponInput.value
+            .trim()
+            .toUpperCase();
+
+
+    const subtotal =
+        getCartSubtotal();
+
+
+    /* =========================
+       VALIDATION
+    ========================= */
+
+    if (!code) {
+
+        couponMessage.innerText =
+            "Please enter a coupon code.";
+
+        couponMessage.className =
+            "coupon-message coupon-error";
+
+        return;
+
+    }
+
+
+    if (subtotal <= 0) {
+
+        couponMessage.innerText =
+            "Your cart is empty.";
+
+        couponMessage.className =
+            "coupon-message coupon-error";
+
+        return;
+
+    }
+
+
+    applyButton.disabled = true;
+
+    applyButton.innerText =
+        "Applying...";
+
+
+    couponMessage.innerText =
+        "Checking coupon...";
+
+    couponMessage.className =
+        "coupon-message";
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/offers/validate`,
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            offer_code: code,
+
+                            coupon_code: code,
+
+                            code: code,
+
+                            order_amount:
+                                subtotal,
+
+                            subtotal:
+                                subtotal
+
+                        })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Coupon API Response:",
+            data
+        );
+
+
+        /* =========================
+           INVALID COUPON
+        ========================= */
+
+        if (
+            !response.ok ||
+            data.success === false ||
+            data.valid === false
+        ) {
+
+            throw new Error(
+                data.message ||
+                "Invalid or inactive coupon."
+            );
+
+        }
+
+
+        /* =========================
+           GET DISCOUNT
+        ========================= */
+
+        let discount =
+            Number(
+                data.discount_amount
+            );
+
+
+        if (
+            !Number.isFinite(discount)
+        ) {
+
+            discount = 0;
+
+        }
+
+
+        /* fallback */
+
+        if (
+            discount <= 0 &&
+            data.discount_percentage
+        ) {
+
+            discount =
+                subtotal *
+                Number(
+                    data.discount_percentage
+                ) /
+                100;
+
+        }
+
+
+        discount =
+            Math.min(
+                Math.max(
+                    discount,
+                    0
+                ),
+                subtotal
+            );
+
+
+        if (discount <= 0) {
+
+            throw new Error(
+                "Coupon discount is 0."
+            );
+
+        }
+
+
+        /* =========================
+           SAVE COUPON
+        ========================= */
+
+        appliedCoupon =
+            data.coupon_code ||
+            data.offer_code ||
+            code;
+
+
+        appliedDiscount =
+            Number(
+                discount.toFixed(2)
+            );
+
+
+        /* =========================
+           MESSAGE
+        ========================= */
+
+        const offerName =
+            data.offer_name ||
+            (
+                data.offer &&
+                data.offer.offer_name
+            ) ||
+            "Coupon";
+
+
+        couponMessage.innerHTML =
+            `✓ ${offerName} applied successfully!`;
+
+        couponMessage.className =
+            "coupon-message coupon-success";
+
+
+        document.getElementById(
+            "removeCouponButton"
+        ).style.display =
+            "block";
+
+
+        couponInput.disabled = true;
+
+
+        updateSummary();
+
+
+    } catch (error) {
+
+        console.error(
+            "Coupon Error:",
+            error
+        );
+
+
+        appliedCoupon = "";
+
+        appliedDiscount = 0;
+
+
+        couponMessage.innerText =
+            error.message ||
+            "Unable to apply coupon.";
+
+        couponMessage.className =
+            "coupon-message coupon-error";
+
+
+        document.getElementById(
+            "removeCouponButton"
+        ).style.display =
+            "none";
+
+
+        updateSummary();
+
+    }
+
+
+    applyButton.disabled = false;
+
+    applyButton.innerText =
+        "Apply";
+
+}
+
+
+
+/* =====================================================
+   REMOVE COUPON
+===================================================== */
+
+function removeCoupon() {
+
+    appliedCoupon = "";
+
+    appliedDiscount = 0;
+
+
+    const couponInput =
+        document.getElementById(
+            "couponCode"
+        );
+
+
+    const couponMessage =
+        document.getElementById(
+            "couponMessage"
+        );
+
+
+    couponInput.value = "";
+
+    couponInput.disabled = false;
+
+
+    couponMessage.innerText =
+        "Coupon removed.";
+
+    couponMessage.className =
+        "coupon-message";
+
+
+    document.getElementById(
+        "removeCouponButton"
+    ).style.display =
+        "none";
+
+
+    updateSummary();
+
+}
+
+
+
+/* =====================================================
+   INCREASE QUANTITY
+===================================================== */
+
+async function increaseQuantity(
+    cartId,
+    stock,
+    currentQuantity
+) {
+
+    if (
+        Number(currentQuantity) >=
+        Number(stock)
+    ) {
+
+        alert(
+            "You cannot add more than available stock."
+        );
+
+        return;
+
+    }
+
+
+    await updateQuantity(
+        cartId,
+        Number(currentQuantity) + 1
+    );
+
+}
+
+
+
+/* =====================================================
+   DECREASE QUANTITY
+===================================================== */
+
+async function decreaseQuantity(
+    cartId
+) {
+
+    const item =
+        cart.find(function(item) {
+
+            return (
+                Number(item.cart_id) ===
+                Number(cartId)
+            );
+
+        });
+
+
+    if (!item) {
+
+        return;
+
+    }
+
+
+    const newQuantity =
+        Number(item.quantity) - 1;
+
+
+    if (newQuantity <= 0) {
+
+        await removeItem(cartId);
+
+        return;
+
+    }
+
+
+    await updateQuantity(
+        cartId,
+        newQuantity
+    );
+
+}
+
+
+
+/* =====================================================
+   UPDATE QUANTITY
+===================================================== */
+
+async function updateQuantity(
+    cartId,
+    quantity
+) {
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/cart/${cartId}`,
+                {
+
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            quantity:
+                                quantity
+                        })
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            alert(
+                result.message ||
+                "Unable to update quantity."
+            );
+
+            return;
+
+        }
+
+
+        /* Coupon discount needs revalidation
+           after subtotal changes */
+
+        if (appliedCoupon) {
+
+            appliedCoupon = "";
+
+            appliedDiscount = 0;
+
+            document.getElementById(
+                "couponCode"
+            ).value = "";
+
+            document.getElementById(
+                "couponCode"
+            ).disabled = false;
+
+            document.getElementById(
+                "couponMessage"
+            ).innerText =
+                "Cart changed. Please apply coupon again.";
+
+            document.getElementById(
+                "couponMessage"
+            ).className =
+                "coupon-message";
+
+            document.getElementById(
+                "removeCouponButton"
+            ).style.display =
+                "none";
+
+        }
+
+
+        await loadCart();
+
+
+    } catch (error) {
+
+        console.error(
+            "Quantity Update Error:",
+            error
+        );
+
+
+        alert(
+            "Backend connection failed."
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   REMOVE ITEM
+===================================================== */
+
+async function removeItem(
+    cartId
+) {
+
+    const confirmRemove =
+        confirm(
+            "Remove this product from cart?"
+        );
+
+
+    if (!confirmRemove) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/cart/${cartId}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            alert(
+                result.message ||
+                "Unable to remove product."
+            );
+
+            return;
+
+        }
+
+
+        appliedCoupon = "";
+
+        appliedDiscount = 0;
+
+
+        await loadCart();
+
+
+    } catch (error) {
+
+        console.error(
+            "Remove Item Error:",
+            error
+        );
+
+
+        alert(
+            "Backend connection failed."
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   UPDATE SUMMARY
+===================================================== */
+
+function updateSummary() {
+
+    let totalItems = 0;
+
+    let subtotal = 0;
+
+
+    cart.forEach(function(item) {
+
+        const quantity =
+            Number(item.quantity) || 1;
+
+
+        const price =
+            Number(item.price) || 0;
+
+
+        totalItems += quantity;
+
+
+        subtotal +=
+            price * quantity;
+
+    });
+
+
+    let discount =
+        Number(appliedDiscount) || 0;
+
+
+    if (discount > subtotal) {
+
+        discount = subtotal;
+
+    }
+
+
+    const finalTotal =
+        Math.max(
+            subtotal - discount,
+            0
+        );
+
+
+    document.getElementById(
+        "totalItems"
+    ).innerText =
+        totalItems;
+
+
+    document.getElementById(
+        "subtotal"
+    ).innerText =
+        "₹" +
+        subtotal.toFixed(2);
+
+
+    document.getElementById(
+        "discountAmount"
+    ).innerText =
+        "-₹" +
+        discount.toFixed(2);
+
+
+    document.getElementById(
+        "totalPrice"
+    ).innerText =
+        "₹" +
+        finalTotal.toFixed(2);
+
+
+    const discountRow =
+        document.getElementById(
+            "discountRow"
+        );
+
+
+    if (discount > 0) {
+
+        discountRow.style.display =
+            "flex";
+
+    } else {
+
+        discountRow.style.display =
+            "none";
+
+    }
+
+}
+
+
+
+/* =====================================================
+   CLEAR CART
+===================================================== */
+
+async function clearCart() {
+
+    if (cart.length === 0) {
+
+        return;
+
+    }
+
+
+    const confirmClear =
+        confirm(
+            "Are you sure you want to clear the cart?"
+        );
+
+
+    if (!confirmClear) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/cart/user/${savedUser.user_id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            alert(
+                result.message ||
+                "Unable to clear cart."
+            );
+
+            return;
+
+        }
+
+
+        appliedCoupon = "";
+
+        appliedDiscount = 0;
+
+
+        await loadCart();
+
+
+    } catch (error) {
+
+        console.error(
+            "Clear Cart Error:",
+            error
+        );
+
+
+        alert(
+            "Backend connection failed."
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   CHECKOUT
+===================================================== */
+
+function checkout() {
+
+    if (cart.length === 0) {
+
+        alert(
+            "Your cart is empty!"
+        );
+
+        return;
+
+    }
+
+
+    const subtotal =
+        getCartSubtotal();
+
+
+    const finalTotal =
+        Math.max(
+            subtotal -
+            appliedDiscount,
+            0
+        );
+
+
+    /* =========================
+       CART ITEMS
+    ========================= */
+
+    localStorage.setItem(
+        "checkoutItems",
+        JSON.stringify(cart)
+    );
+
+
+    /* =========================
+       COUPON DATA
+    ========================= */
+
+    localStorage.setItem(
+        "checkoutCoupon",
+        JSON.stringify({
+
+            coupon_code:
+                appliedCoupon || "",
+
+            offer_code:
+                appliedCoupon || "",
+
+            discount_amount:
+                Number(
+                    appliedDiscount.toFixed(2)
+                ),
+
+            subtotal:
+                Number(
+                    subtotal.toFixed(2)
+                ),
+
+            total_amount:
+                Number(
+                    finalTotal.toFixed(2)
+                )
+
+        })
+    );
+
+
+    console.log(
+        "Checkout Coupon:",
+        {
+            coupon: appliedCoupon,
+            discount: appliedDiscount,
+            subtotal: subtotal,
+            total: finalTotal
+        }
+    );
+
+
+    window.location.href =
+        "checkout.html";
+
+}
+
+
+
+/* =====================================================
+   PRODUCTS
+===================================================== */
+
+function goProducts() {
+
+    window.location.href =
+        "products.html";
+
+}
+
+
+
+/* =====================================================
+   HOME
+===================================================== */
+
+function goHome() {
+
+    window.location.href =
+        "home.html";
+
+}
+
+
+
+/* =====================================================
+   PAGE LOAD
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        loadCart();
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

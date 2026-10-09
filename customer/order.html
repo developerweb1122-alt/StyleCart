@@ -1,0 +1,332 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StyleCart - My Orders</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#fff7f9;color:#333}
+header{background:linear-gradient(135deg,#ff4d6d,#ff758f);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.logo{font-size:28px;font-weight:bold}
+nav{display:flex;gap:20px;flex-wrap:wrap}
+nav a{color:white;text-decoration:none;font-size:14px;font-weight:bold}
+nav a:hover{text-decoration:underline}
+.container{width:92%;max-width:1100px;margin:35px auto}
+.page-title{font-size:30px;color:#e11d48;margin-bottom:8px}
+.page-subtitle{color:#777;margin-bottom:25px}
+.loading,.empty-orders{text-align:center;padding:45px 20px;color:#777;background:white;border-radius:12px}
+.empty-orders h2{margin:12px 0;color:#444}
+.empty-orders p{margin-bottom:20px}
+.shop-btn{display:inline-block;padding:12px 24px;background:#e11d48;color:white;text-decoration:none;border-radius:8px;font-weight:bold}
+.order-card{background:white;border-radius:15px;margin-bottom:25px;padding:22px;box-shadow:0 4px 15px #00000012}
+.order-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding-bottom:15px;margin-bottom:18px;gap:15px}
+.order-id{font-size:19px;font-weight:bold}
+.order-date{color:#777;font-size:14px;margin-top:5px}
+.status{padding:7px 14px;border-radius:20px;font-size:13px;font-weight:bold;display:inline-block;background:#fff3cd;color:#856404}
+.status.confirmed{background:#dbeafe;color:#1d4ed8}
+.status.shipped{background:#e0e7ff;color:#4338ca}
+.status.delivered{background:#dcfce7;color:#166534}
+.status.cancelled{background:#fee2e2;color:#b91c1c}
+.shipping-box{background:#fff7f9;border-radius:10px;padding:13px;margin-bottom:18px}
+.shipping-address{color:#666;margin-top:5px;line-height:1.5;white-space:pre-wrap}
+.items-title{font-size:17px;font-weight:bold;margin-bottom:12px;color:#444}
+.order-item{display:flex;align-items:center;gap:15px;padding:12px 0;border-bottom:1px solid #eee}
+.product-image{width:75px;height:85px;object-fit:cover;border-radius:8px;background:#f5f5f5}
+.item-info{flex:1}
+.item-name{font-size:16px;font-weight:bold;margin-bottom:5px}
+.item-details{color:#777;font-size:14px;line-height:1.6}
+.item-price{font-weight:bold;color:#e11d48}
+.order-footer{margin-top:18px;padding-top:18px;border-top:1px solid #eee}
+.total-label{color:#666;font-size:14px;margin-bottom:5px}
+.coupon-text{color:#16a34a;font-size:14px;margin-bottom:5px;font-weight:bold}
+.total-amount{font-size:22px;font-weight:bold;color:#e11d48}
+.action-buttons{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.action-btn{padding:10px 16px;border-radius:7px;border:none;cursor:pointer;font-weight:bold;font-size:13px}
+.track-btn{background:#e11d48;color:white}
+.return-btn{background:#fce7f3;color:#be123c}
+.action-btn:hover{opacity:.85}
+.error-box{background:#fee2e2;color:#991b1b;padding:18px;border-radius:10px;text-align:center}
+.retry-btn{margin-top:12px;padding:9px 18px;border:none;border-radius:7px;background:#dc2626;color:white;cursor:pointer;font-weight:bold}
+.modal{display:none;position:fixed;z-index:9999;inset:0;width:100%;height:100%;background:#0008;justify-content:center;align-items:center;padding:20px}
+.modal-content{background:white;width:100%;max-width:500px;border-radius:15px;padding:25px;position:relative}
+.close-btn{position:absolute;right:18px;top:12px;font-size:27px;cursor:pointer;color:#777}
+.modal-title{color:#e11d48;margin-bottom:20px;font-size:22px}
+.tracking-status{padding:15px;background:#fff7f9;border-radius:10px;text-align:center;margin-bottom:20px}
+.tracking-steps{display:flex;flex-direction:column;gap:15px}
+.tracking-step{display:flex;align-items:center;gap:12px}
+.step-circle{width:30px;height:30px;flex-shrink:0;border-radius:50%;background:#ddd;display:flex;align-items:center;justify-content:center;font-weight:bold}
+.step-circle.active{background:#e11d48;color:white}
+.step-text{font-weight:bold}
+@media(max-width:700px){
+ header{padding:15px 20px;flex-direction:column}
+ nav{justify-content:center}
+ .container{width:94%}
+ .order-header{align-items:flex-start;flex-direction:column}
+ .order-item{align-items:flex-start}
+}
+</style>
+</head>
+
+<body>
+<header>
+    <div class="logo">StyleCart</div>
+    <nav>
+        <a href="/customer/home.html">Home</a>
+        <a href="/customer/product.html">Products</a>
+        <a href="/customer/wishlist.html">Wishlist</a>
+        <a href="/customer/cart.html">Cart</a>
+        <a href="/customer/order.html">My Orders</a>
+    </nav>
+</header>
+
+<main class="container">
+    <h1 class="page-title">My Orders</h1>
+    <p class="page-subtitle">View and track all your StyleCart orders.</p>
+    <div id="ordersContainer">
+        <div class="loading">Loading your orders...</div>
+    </div>
+</main>
+
+<div id="trackModal" class="modal" onclick="if(event.target===this)closeTrackModal()">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeTrackModal()">&times;</span>
+        <h2 class="modal-title">Track Your Order</h2>
+        <div id="trackingContent"></div>
+    </div>
+</div>
+
+<script>
+const API_URL = "http://127.0.0.1:5000";
+
+function getUser() {
+    try {
+        return JSON.parse(localStorage.getItem("stylecartUser") || "null");
+    } catch (error) {
+        console.error("Invalid stylecartUser:", error);
+        return null;
+    }
+}
+
+const user = getUser();
+const container = document.getElementById("ordersContainer");
+
+function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+    })[char]);
+}
+
+function money(value) {
+    return Number(value || 0).toLocaleString("en-IN", {
+        minimumFractionDigits:2,
+        maximumFractionDigits:2
+    });
+}
+
+function formatDate(value) {
+    if (!value) return "Date not available";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return escapeHtml(value);
+    return date.toLocaleString("en-IN", {
+        day:"2-digit",month:"short",year:"numeric",
+        hour:"2-digit",minute:"2-digit"
+    });
+}
+
+if (!user || !user.user_id) {
+    container.innerHTML = `
+        <div class="empty-orders">
+            <div style="font-size:48px">🔐</div>
+            <h2>Please Login</h2>
+            <p>Please login to view your orders.</p>
+            <a class="shop-btn" href="/customer/login.html">Login</a>
+        </div>`;
+} else {
+    loadOrders();
+}
+
+async function loadOrders() {
+    container.innerHTML = '<div class="loading">Loading your orders...</div>';
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/orders/${encodeURIComponent(user.user_id)}`
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || data.success === false) {
+            throw new Error(data.message || "Unable to load orders.");
+        }
+
+        // Supports both {success:true, orders:[...]} and direct array responses.
+        const orders = Array.isArray(data) ? data :
+            (Array.isArray(data.orders) ? data.orders : []);
+
+        displayOrders(orders);
+    } catch (error) {
+        console.error("Orders loading error:", error);
+        container.innerHTML = `
+            <div class="error-box">
+                <strong>Unable to load orders</strong>
+                <p style="margin-top:8px">${escapeHtml(error.message)}</p>
+                <button class="retry-btn" onclick="loadOrders()">Retry</button>
+            </div>`;
+    }
+}
+
+function displayOrders(orders) {
+    if (!orders.length) {
+        container.innerHTML = `
+            <div class="empty-orders">
+                <div style="font-size:48px">🛍️</div>
+                <h2>No Orders Yet</h2>
+                <p>You haven't placed any orders yet.</p>
+                <a class="shop-btn" href="/customer/product.html">Start Shopping</a>
+            </div>`;
+        return;
+    }
+
+    container.innerHTML = orders.map(createOrderCard).join("");
+}
+
+function createOrderCard(order) {
+    const orderId = order.order_id ?? "N/A";
+    const status = order.order_status || "Pending";
+    const statusKey = status.toLowerCase().trim();
+    const statusClass = ["pending","confirmed","shipped","delivered","cancelled"].includes(statusKey)
+        ? statusKey : "pending";
+
+    const items = Array.isArray(order.items) ? order.items : [];
+    const total = Number(order.total_amount || 0);
+    const discount = Number(order.discount_amount || order.discount || 0);
+
+    const itemsHtml = items.length ? items.map(item => {
+        const name = item.product_name || "Product";
+        const quantity = Number(item.quantity || 1);
+        const price = Number(item.price || 0);
+        const image = item.image_url || "";
+
+        return `
+            <div class="order-item">
+                <img class="product-image"
+                     src="${escapeHtml(image || 'https://via.placeholder.com/100x120?text=StyleCart')}"
+                     alt="${escapeHtml(name)}"
+                     onerror="this.onerror=null;this.src='https://via.placeholder.com/100x120?text=StyleCart'">
+                <div class="item-info">
+                    <div class="item-name">${escapeHtml(name)}</div>
+                    <div class="item-details">
+                        Quantity: ${quantity}<br>
+                        Price: ₹${money(price)}
+                    </div>
+                </div>
+                <div class="item-price">₹${money(price * quantity)}</div>
+            </div>`;
+    }).join("") : '<p class="item-details">No item details available.</p>';
+
+    const couponHtml = order.coupon_code
+        ? `<div class="coupon-text">Coupon: ${escapeHtml(order.coupon_code)}</div>`
+        : "";
+
+    return `
+        <article class="order-card">
+            <div class="order-header">
+                <div>
+                    <div class="order-id">Order #${escapeHtml(orderId)}</div>
+                    <div class="order-date">${formatDate(order.order_date || order.created_at)}</div>
+                </div>
+                <span class="status ${statusClass}">${escapeHtml(status)}</span>
+            </div>
+
+            <div class="shipping-box">
+                <strong>📦 Shipping Address</strong>
+                <div class="shipping-address">
+                    ${escapeHtml(order.shipping_address || "Shipping address information not available")}
+                </div>
+            </div>
+
+            <div class="items-title">Order Items</div>
+            <div>${itemsHtml}</div>
+
+            <div class="order-footer">
+                ${discount > 0 ? `<div class="total-label">Discount: ₹${money(discount)}</div>` : ""}
+                ${couponHtml}
+                <div class="total-label">Order Total</div>
+                <div class="total-amount">₹${money(total)}</div>
+            </div>
+
+            <div class="action-buttons">
+                <button type="button" class="action-btn track-btn"
+                    onclick="trackOrder('${escapeHtml(orderId)}','${escapeHtml(status)}')">
+                    Track Order
+                </button>
+                <button type="button" class="action-btn return-btn"
+                    onclick="returnExchange('${encodeURIComponent(String(orderId))}')">
+                    Return / Exchange
+                </button>
+            </div>
+        </article>`;
+}
+
+function trackOrder(orderId, status) {
+    const currentStatus = String(status || "Pending").toLowerCase().trim();
+    const steps = ["Order Placed", "Order Confirmed", "Shipped", "Delivered"];
+
+    if (currentStatus === "cancelled") {
+        document.getElementById("trackingContent").innerHTML = `
+            <div class="tracking-status">
+                <h3 style="color:#b91c1c">❌ Order Cancelled</h3>
+                <p>Order #${escapeHtml(orderId)}</p>
+            </div>`;
+    } else {
+        let activeStep = 1;
+        if (currentStatus === "confirmed") activeStep = 2;
+        if (currentStatus === "shipped") activeStep = 3;
+        if (currentStatus === "delivered") activeStep = 4;
+
+        document.getElementById("trackingContent").innerHTML = `
+            <div class="tracking-status">
+                <h3>Order #${escapeHtml(orderId)}</h3>
+                <p>Current Status: <strong>${escapeHtml(status)}</strong></p>
+            </div>
+            <div class="tracking-steps">
+                ${steps.map((step,index) => `
+                    <div class="tracking-step">
+                        <div class="step-circle ${index < activeStep ? "active" : ""}">
+                            ${index < activeStep ? "✓" : index + 1}
+                        </div>
+                        <div class="step-text">${step}</div>
+                    </div>`).join("")}
+            </div>`;
+    }
+
+    document.getElementById("trackModal").style.display = "flex";
+}
+
+function closeTrackModal() {
+    document.getElementById("trackModal").style.display = "none";
+}
+
+function returnExchange(orderId) {
+    if (!orderId || decodeURIComponent(orderId) === "N/A") {
+        alert("Order ID not found.");
+        return;
+    }
+
+    window.location.href =
+        `${API_URL}/customer/returnexchange.html?order_id=${orderId}`;
+}
+
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") closeTrackModal();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StyleCart - Offers Management</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: white;
+            border-right: 1px solid #ddd;
+            padding: 25px 15px;
+            overflow-y: auto;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            color: #e11d48;
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .profile {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-circle {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: #e11d48;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .profile h3 {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        .profile p {
+            color: #777;
+            font-size: 13px;
+        }
+
+        .menu a {
+            display: block;
+            text-decoration: none;
+            color: #444;
+            padding: 13px 15px;
+            margin-bottom: 6px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            background: #ffe4ec;
+            color: #e11d48;
+        }
+
+        .logout {
+            margin-top: 25px;
+            color: #dc2626 !important;
+        }
+
+        /* ================= MAIN ================= */
+
+        .main {
+            margin-left: 250px;
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+        }
+
+        .add-btn {
+            background: #e11d48;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .add-btn:hover {
+            background: #be123c;
+        }
+
+        /* ================= STATS ================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .stat-card h3 {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card p {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        /* ================= TABLE ================= */
+
+        .table-box {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 14px 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            white-space: nowrap;
+        }
+
+        th {
+            background: #fff1f2;
+            color: #555;
+        }
+
+        .code {
+            background: #f3f4f6;
+            padding: 5px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .active {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .inactive {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .action-btn {
+            border: none;
+            padding: 7px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .deactivate {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .activate {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #777;
+        }
+
+        /* ================= MODAL ================= */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            width: 450px;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #e11d48;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .save-btn {
+            flex: 1;
+            background: #e11d48;
+            color: white;
+            border: none;
+            padding: 11px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .cancel-btn {
+            flex: 1;
+            background: #eee;
+            color: #333;
+            border: none;
+            padding: 11px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        #message {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        StyleCart
+    </div>
+
+
+    <div class="profile">
+
+        <div class="profile-circle">
+            A
+        </div>
+
+        <h3>
+            Administrator
+        </h3>
+
+        <p>
+            Admin
+        </p>
+
+    </div>
+
+
+    <div class="menu">
+
+        <a href="admindashboard.html">
+            Dashboard
+        </a>
+
+        <a href="products.html">
+            Products
+        </a>
+
+        <a href="categories.html">
+            Categories
+        </a>
+
+        <a href="orders.html">
+            Orders
+        </a>
+
+        <a href="customers.html">
+            Customers
+        </a>
+
+        <a
+            href="offers.html"
+            class="active"
+        >
+            Offers
+        </a>
+
+        <a href="inventory.html">
+            Inventory
+        </a>
+
+        <a href="returns.html">
+            Returns & Exchange
+        </a>
+
+        <a href="adminprofile.html">
+            Admin Profile
+        </a>
+
+        <a
+            href="#"
+            class="logout"
+            onclick="logoutAdmin()"
+        >
+            Logout
+        </a>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<div class="main">
+
+
+    <div class="header">
+
+        <h1>
+            Offers Management
+        </h1>
+
+
+        <button
+            class="add-btn"
+            onclick="openModal()"
+        >
+            + Add Offer
+        </button>
+
+    </div>
+
+
+
+    <!-- =================================================
+         STATS
+    ================================================== -->
+
+    <div class="stats">
+
+
+        <div class="stat-card">
+
+            <h3>
+                Total Offers
+            </h3>
+
+            <p id="totalOffers">
+                0
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <h3>
+                Active Offers
+            </h3>
+
+            <p id="activeOffers">
+                0
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <h3>
+                Inactive Offers
+            </h3>
+
+            <p id="inactiveOffers">
+                0
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =================================================
+         TABLE
+    ================================================== -->
+
+    <div class="table-box">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        ID
+                    </th>
+
+                    <th>
+                        Offer Name
+                    </th>
+
+                    <th>
+                        Code
+                    </th>
+
+                    <th>
+                        Discount
+                    </th>
+
+                    <th>
+                        Minimum Order
+                    </th>
+
+                    <th>
+                        Start Date
+                    </th>
+
+                    <th>
+                        End Date
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="offersTable">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     ADD OFFER MODAL
+===================================================== -->
+
+<div
+    class="modal"
+    id="offerModal"
+>
+
+    <div class="modal-content">
+
+
+        <h2>
+            Add New Offer
+        </h2>
+
+
+        <div class="form-group">
+
+            <label>
+                Offer Name
+            </label>
+
+            <input
+                type="text"
+                id="offerName"
+                placeholder="Example: Diwali Sale"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Coupon Code
+            </label>
+
+            <input
+                type="text"
+                id="offerCode"
+                placeholder="Example: DIWALI20"
+                style="text-transform:uppercase;"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Discount Type
+            </label>
+
+            <select id="discountType">
+
+                <option value="Percentage">
+                    Percentage
+                </option>
+
+                <option value="Fixed">
+                    Fixed Amount
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Discount Value
+            </label>
+
+            <input
+                type="number"
+                id="discountValue"
+                placeholder="Example: 20"
+                min="1"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Minimum Order Amount
+            </label>
+
+            <input
+                type="number"
+                id="minOrderAmount"
+                placeholder="Example: 999"
+                min="0"
+                value="0"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Start Date
+            </label>
+
+            <input
+                type="date"
+                id="startDate"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                End Date
+            </label>
+
+            <input
+                type="date"
+                id="endDate"
+            >
+
+        </div>
+
+
+        <div class="form-buttons">
+
+            <button
+                class="cancel-btn"
+                onclick="closeModal()"
+            >
+                Cancel
+            </button>
+
+
+            <button
+                class="save-btn"
+                onclick="createOffer()"
+            >
+                Save Offer
+            </button>
+
+        </div>
+
+
+        <div id="message"></div>
+
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+
+/* =====================================================
+   API
+===================================================== */
+
+const API_URL =
+    "http://127.0.0.1:5000";
+
+
+
+/* =====================================================
+   LOAD OFFERS
+===================================================== */
+
+async function loadOffers() {
+
+    const table =
+        document.getElementById(
+            "offersTable"
+        );
+
+
+    table.innerHTML = `
+
+        <tr>
+
+            <td
+                colspan="9"
+                class="empty"
+            >
+                Loading offers...
+            </td>
+
+        </tr>
+
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL +
+                "/api/admin/offers"
+            );
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "OFFERS API RESPONSE:",
+            result
+        );
+
+
+        if (
+            !response.ok ||
+            result.success === false
+        ) {
+
+            throw new Error(
+                result.message ||
+                "Unable to load offers."
+            );
+
+        }
+
+
+        const offers =
+            Array.isArray(
+                result.offers
+            )
+            ? result.offers
+            : [];
+
+
+        displayOffers(
+            offers
+        );
+
+
+        updateStats(
+            offers
+        );
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "LOAD OFFERS ERROR:",
+            error
+        );
+
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="9"
+                    class="empty"
+                >
+                    Unable to load offers.
+                    <br><br>
+                    ${escapeHTML(
+                        error.message
+                    )}
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   DISPLAY OFFERS
+===================================================== */
+
+function displayOffers(
+    offers
+) {
+
+    const table =
+        document.getElementById(
+            "offersTable"
+        );
+
+
+    table.innerHTML = "";
+
+
+    if (
+        !Array.isArray(offers) ||
+        offers.length === 0
+    ) {
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="9"
+                    class="empty"
+                >
+                    No offers found.
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    offers.forEach(
+        function(offer) {
+
+
+            const discountType =
+                String(
+                    offer.discount_type ||
+                    ""
+                ).trim().toLowerCase();
+
+
+            let discountText;
+
+
+            if (
+                discountType ===
+                "percentage" ||
+                discountType ===
+                "percent"
+            ) {
+
+                discountText =
+                    Number(
+                        offer.discount_value ||
+                        0
+                    ) +
+                    "%";
+
+            }
+
+            else {
+
+                discountText =
+                    "₹" +
+                    Number(
+                        offer.discount_value ||
+                        0
+                    ).toFixed(2);
+
+            }
+
+
+            const status =
+                String(
+                    offer.status ||
+                    ""
+                ).trim();
+
+
+            const isActive =
+                status.toLowerCase() ===
+                "active";
+
+
+            const statusClass =
+                isActive
+                ? "active"
+                : "inactive";
+
+
+            const buttonClass =
+                isActive
+                ? "deactivate"
+                : "activate";
+
+
+            const buttonText =
+                isActive
+                ? "Deactivate"
+                : "Activate";
+
+
+            /* ==========================================
+               IMPORTANT:
+               Backend normally returns coupon_code.
+               We support both names.
+            ========================================== */
+
+            const couponCode =
+                offer.coupon_code ||
+                offer.offer_code ||
+                "";
+
+
+            table.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${escapeHTML(
+                            offer.offer_id
+                        )}
+                    </td>
+
+
+                    <td>
+                        ${escapeHTML(
+                            offer.offer_name
+                        )}
+                    </td>
+
+
+                    <td>
+
+                        <span class="code">
+
+                            ${escapeHTML(
+                                couponCode
+                            )}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+                        ${discountText}
+                    </td>
+
+
+                    <td>
+
+                        ₹${Number(
+                            offer.min_order_amount ||
+                            0
+                        ).toFixed(2)}
+
+                    </td>
+
+
+                    <td>
+
+                        ${formatDate(
+                            offer.start_date
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        ${formatDate(
+                            offer.end_date
+                        )}
+
+                    </td>
+
+
+                    <td
+                        class="${statusClass}"
+                    >
+
+                        ${escapeHTML(
+                            status
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        <button
+
+                            class="action-btn
+                            ${buttonClass}"
+
+                            onclick="toggleStatus(
+                                ${Number(
+                                    offer.offer_id
+                                )},
+                                '${status}'
+                            )"
+
+                        >
+
+                            ${buttonText}
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   UPDATE STATS
+===================================================== */
+
+function updateStats(
+    offers
+) {
+
+    const total =
+        offers.length;
+
+
+    const active =
+        offers.filter(
+            function(offer) {
+
+                return String(
+                    offer.status || ""
+                ).toLowerCase() ===
+                "active";
+
+            }
+        ).length;
+
+
+    const inactive =
+        offers.filter(
+            function(offer) {
+
+                return String(
+                    offer.status || ""
+                ).toLowerCase() ===
+                "inactive";
+
+            }
+        ).length;
+
+
+    document.getElementById(
+        "totalOffers"
+    ).textContent =
+        total;
+
+
+    document.getElementById(
+        "activeOffers"
+    ).textContent =
+        active;
+
+
+    document.getElementById(
+        "inactiveOffers"
+    ).textContent =
+        inactive;
+
+}
+
+
+
+/* =====================================================
+   OPEN MODAL
+===================================================== */
+
+function openModal() {
+
+    document.getElementById(
+        "offerModal"
+    ).style.display =
+        "flex";
+
+
+    document.getElementById(
+        "message"
+    ).textContent =
+        "";
+
+}
+
+
+
+/* =====================================================
+   CLOSE MODAL
+===================================================== */
+
+function closeModal() {
+
+    document.getElementById(
+        "offerModal"
+    ).style.display =
+        "none";
+
+
+    clearForm();
+
+}
+
+
+
+/* =====================================================
+   CLEAR FORM
+===================================================== */
+
+function clearForm() {
+
+    document.getElementById(
+        "offerName"
+    ).value = "";
+
+
+    document.getElementById(
+        "offerCode"
+    ).value = "";
+
+
+    document.getElementById(
+        "discountType"
+    ).value =
+        "Percentage";
+
+
+    document.getElementById(
+        "discountValue"
+    ).value = "";
+
+
+    document.getElementById(
+        "minOrderAmount"
+    ).value =
+        "0";
+
+
+    document.getElementById(
+        "startDate"
+    ).value = "";
+
+
+    document.getElementById(
+        "endDate"
+    ).value = "";
+
+
+    document.getElementById(
+        "message"
+    ).textContent =
+        "";
+
+}
+
+
+
+/* =====================================================
+   CREATE OFFER
+===================================================== */
+
+async function createOffer() {
+
+
+    const offerName =
+        document.getElementById(
+            "offerName"
+        ).value.trim();
+
+
+    const offerCode =
+        document.getElementById(
+            "offerCode"
+        ).value.trim().toUpperCase();
+
+
+    const discountType =
+        document.getElementById(
+            "discountType"
+        ).value;
+
+
+    const discountValue =
+        Number(
+            document.getElementById(
+                "discountValue"
+            ).value
+        );
+
+
+    const minOrderAmount =
+        Number(
+            document.getElementById(
+                "minOrderAmount"
+            ).value || 0
+        );
+
+
+    const startDate =
+        document.getElementById(
+            "startDate"
+        ).value;
+
+
+    const endDate =
+        document.getElementById(
+            "endDate"
+        ).value;
+
+
+
+    /* =================================================
+       VALIDATION
+    ================================================= */
+
+    if (!offerName) {
+
+        showMessage(
+            "Offer name is required.",
+            "red"
+        );
+
+        return;
+
+    }
+
+
+    if (!offerCode) {
+
+        showMessage(
+            "Coupon code is required.",
+            "red"
+        );
+
+        return;
+
+    }
+
+
+    if (discountValue <= 0) {
+
+        showMessage(
+            "Discount value must be greater than 0.",
+            "red"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        discountType === "Percentage" &&
+        discountValue > 100
+    ) {
+
+        showMessage(
+            "Percentage discount cannot be more than 100%.",
+            "red"
+        );
+
+        return;
+
+    }
+
+
+    if (minOrderAmount < 0) {
+
+        showMessage(
+            "Minimum order cannot be negative.",
+            "red"
+        );
+
+        return;
+
+    }
+
+
+    if (!startDate) {
+
+        showMessage(
+            "Start date is required.",
+            "red"
+        );
+
+        return;
+
+    }
+
+
+    if (!endDate) {
+
+        showMessage(
+            "End date is required.",
+            "red"
+        );
+
+        return;
+
+    }
+
+
+    if (endDate < startDate) {
+
+        showMessage(
+            "End date cannot be before start date.",
+            "red"
+        );
+
+        return;
+
+    }
+
+
+
+    /* =================================================
+       OFFER DATA
+    ================================================= */
+
+    const offerData = {
+
+        offer_name:
+            offerName,
+
+        /*
+         * IMPORTANT:
+         * Actual DB column is coupon_code.
+         */
+
+        coupon_code:
+            offerCode,
+
+        /*
+         * Send offer_code too for compatibility
+         * with existing backend.
+         */
+
+        offer_code:
+            offerCode,
+
+        discount_type:
+            discountType,
+
+        discount_value:
+            discountValue,
+
+        min_order_amount:
+            minOrderAmount,
+
+        start_date:
+            startDate,
+
+        end_date:
+            endDate,
+
+        status:
+            "Active"
+
+    };
+
+
+    console.log(
+        "SENDING OFFER:",
+        offerData
+    );
+
+
+
+    try {
+
+
+        const response =
+            await fetch(
+                API_URL +
+                "/api/admin/offers",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify(
+                            offerData
+                        )
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "CREATE OFFER RESPONSE:",
+            result
+        );
+
+
+        if (!response.ok) {
+
+            showMessage(
+                result.message ||
+                "Unable to create offer.",
+                "red"
+            );
+
+            return;
+
+        }
+
+
+        showMessage(
+            "Offer created successfully!",
+            "green"
+        );
+
+
+        setTimeout(
+            function() {
+
+                closeModal();
+
+                loadOffers();
+
+            },
+            700
+        );
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "CREATE OFFER ERROR:",
+            error
+        );
+
+
+        showMessage(
+            "Backend connection failed.",
+            "red"
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   TOGGLE STATUS
+===================================================== */
+
+async function toggleStatus(
+    offerId,
+    currentStatus
+) {
+
+
+    const newStatus =
+        String(
+            currentStatus
+        ).toLowerCase() ===
+        "active"
+        ? "Inactive"
+        : "Active";
+
+
+    try {
+
+
+        const response =
+            await fetch(
+                API_URL +
+                "/api/admin/offers/" +
+                offerId +
+                "/status",
+                {
+
+                    method: "PUT",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            status:
+                                newStatus
+
+                        })
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            alert(
+                result.message ||
+                "Unable to update status."
+            );
+
+            return;
+
+        }
+
+
+        loadOffers();
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "STATUS UPDATE ERROR:",
+            error
+        );
+
+
+        alert(
+            "Backend connection failed."
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   DATE FORMAT
+===================================================== */
+
+function formatDate(
+    dateValue
+) {
+
+    if (!dateValue) {
+
+        return "-";
+
+    }
+
+
+    const date =
+        new Date(
+            dateValue
+        );
+
+
+    if (
+        isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return String(
+            dateValue
+        );
+
+    }
+
+
+    return date.toLocaleDateString(
+        "en-IN"
+    );
+
+}
+
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(
+    value
+) {
+
+    return String(
+        value == null
+        ? ""
+        : value
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+function showMessage(
+    message,
+    color
+) {
+
+    const element =
+        document.getElementById(
+            "message"
+        );
+
+
+    element.textContent =
+        message;
+
+
+    element.style.color =
+        color === "green"
+        ? "#15803d"
+        : "#dc2626";
+
+}
+
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logoutAdmin() {
+
+    window.location.href =
+        "logout.html";
+
+}
+
+
+
+/* =====================================================
+   CLOSE MODAL WHEN CLICKING OUTSIDE
+===================================================== */
+
+window.addEventListener(
+    "click",
+    function(event) {
+
+        const modal =
+            document.getElementById(
+                "offerModal"
+            );
+
+
+        if (
+            event.target === modal
+        ) {
+
+            closeModal();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   LOAD PAGE
+===================================================== */
+
+loadOffers();
+
+</script>
+
+
+</body>
+
+</html>

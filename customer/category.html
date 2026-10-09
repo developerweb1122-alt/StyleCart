@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StyleCart - Categories</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #fff7f9;
+            color: #333;
+        }
+
+        /* HEADER */
+        header {
+            background: white;
+            padding: 18px 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #e91e63;
+            cursor: pointer;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .search-box {
+            padding: 10px 15px;
+            width: 220px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+        }
+
+        .cart-btn {
+            border: none;
+            background: #e91e63;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        /* MAIN */
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 50px 25px;
+        }
+
+        .heading {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .heading h1 {
+            font-size: 35px;
+            color: #222;
+            margin-bottom: 10px;
+        }
+
+        .heading p {
+            color: #777;
+            font-size: 16px;
+        }
+
+        /* CATEGORY GRID */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .category-card {
+            background: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .category-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .category-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .category-card h3 {
+            font-size: 21px;
+            margin-bottom: 8px;
+            color: #222;
+        }
+
+        .category-card p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        /* BACK BUTTON */
+        .back-section {
+            text-align: center;
+            margin-top: 45px;
+        }
+
+        .back-btn {
+            padding: 12px 25px;
+            background: #e91e63;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .back-btn:hover {
+            background: #c2185b;
+        }
+
+        /* MOBILE */
+        @media (max-width: 900px) {
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            header {
+                padding: 15px 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-right {
+                gap: 8px;
+            }
+
+            .search-box {
+                width: 150px;
+            }
+
+            .logo {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+
+        <div class="logo" onclick="goHome()">
+            StyleCart
+        </div>
+
+        <div class="header-right">
+
+            <input
+                type="text"
+                id="searchInput"
+                class="search-box"
+                placeholder="Search category..."
+                onkeyup="searchCategory()"
+            >
+
+            <button class="cart-btn" onclick="openCart()">
+                🛒 Cart
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- MAIN -->
+    <div class="container">
+
+        <div class="heading">
+
+            <h1 id="pageTitle">
+                Shop by Category
+            </h1>
+
+            <p id="pageDescription">
+                Choose your favourite clothing category
+            </p>
+
+        </div>
+
+
+        <!-- CATEGORY CARDS -->
+        <div class="category-grid" id="categoryGrid">
+
+        </div>
+
+
+        <!-- BACK BUTTON -->
+        <div class="back-section">
+
+            <button
+                class="back-btn"
+                onclick="goHome()"
+            >
+                ← Back to Home
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        // GET SELECTED CATEGORY FROM URL
+        const urlParams = new URLSearchParams(window.location.search);
+
+        const selectedCategory =
+            urlParams.get("category");
+
+
+        // CATEGORY DATA
+        const categoryData = {
+
+            Men: [
+                {
+                    name: "T-Shirts",
+                    icon: "👕",
+                    description: "Casual and stylish men's T-Shirts"
+                },
+                {
+                    name: "Jeans",
+                    icon: "👖",
+                    description: "Trendy men's jeans"
+                },
+                {
+                    name: "Shirts",
+                    icon: "👔",
+                    description: "Formal and casual shirts"
+                },
+                {
+                    name: "Jackets",
+                    icon: "🧥",
+                    description: "Stylish men's jackets"
+                }
+            ],
+
+            Women: [
+                {
+                    name: "Dresses",
+                    icon: "👗",
+                    description: "Stylish dresses for women"
+                },
+                {
+                    name: "Kurtis",
+                    icon: "🥻",
+                    description: "Traditional and modern kurtis"
+                },
+                {
+                    name: "T-Shirts",
+                    icon: "👕",
+                    description: "Women's casual T-Shirts"
+                },
+                {
+                    name: "Jeans",
+                    icon: "👖",
+                    description: "Trendy women's jeans"
+                },
+                {
+                    name: "Jackets",
+                    icon: "🧥",
+                    description: "Stylish women's jackets"
+                }
+            ],
+
+            Kids: [
+                {
+                    name: "T-Shirts",
+                    icon: "👕",
+                    description: "Comfortable kids T-Shirts"
+                },
+                {
+                    name: "Jeans",
+                    icon: "👖",
+                    description: "Trendy jeans for kids"
+                },
+                {
+                    name: "Dresses",
+                    icon: "👗",
+                    description: "Cute kids dresses"
+                },
+                {
+                    name: "Jackets",
+                    icon: "🧥",
+                    description: "Stylish jackets for kids"
+                }
+            ]
+
+        };
+
+
+        // SHOW CATEGORIES
+        function showCategories() {
+
+            const grid =
+                document.getElementById("categoryGrid");
+
+            const title =
+                document.getElementById("pageTitle");
+
+            const description =
+                document.getElementById("pageDescription");
+
+
+            // If Men / Women / Kids selected
+            if (selectedCategory &&
+                categoryData[selectedCategory]) {
+
+                title.innerText =
+                    selectedCategory + " Clothing";
+
+                description.innerText =
+                    "Choose what you want to shop";
+
+                const categories =
+                    categoryData[selectedCategory];
+
+
+                categories.forEach(function(category) {
+
+                    const card =
+                        document.createElement("div");
+
+                    card.className =
+                        "category-card";
+
+                    card.setAttribute(
+                        "data-name",
+                        category.name.toLowerCase()
+                    );
+
+
+                    card.onclick = function() {
+
+                        openProducts(
+                            selectedCategory,
+                            category.name
+                        );
+
+                    };
+
+
+                    card.innerHTML = `
+
+                        <div class="category-icon">
+                            ${category.icon}
+                        </div>
+
+                        <h3>
+                            ${category.name}
+                        </h3>
+
+                        <p>
+                            ${category.description}
+                        </p>
+
+                    `;
+
+
+                    grid.appendChild(card);
+
+                });
+
+            } else {
+
+                // Default category page
+
+                title.innerText =
+                    "Shop by Category";
+
+                description.innerText =
+                    "Choose your favourite clothing category";
+
+
+                const defaultCategories = [
+
+                    {
+                        name: "Men",
+                        icon: "👔",
+                        description: "Men's clothing collection"
+                    },
+
+                    {
+                        name: "Women",
+                        icon: "👗",
+                        description: "Women's clothing collection"
+                    },
+
+                    {
+                        name: "Kids",
+                        icon: "🧒",
+                        description: "Kids clothing collection"
+                    }
+
+                ];
+
+
+                defaultCategories.forEach(function(category) {
+
+                    const card =
+                        document.createElement("div");
+
+                    card.className =
+                        "category-card";
+
+                    card.setAttribute(
+                        "data-name",
+                        category.name.toLowerCase()
+                    );
+
+
+                    card.onclick = function() {
+
+                        window.location.href =
+                            "category.html?category=" +
+                            encodeURIComponent(category.name);
+
+                    };
+
+
+                    card.innerHTML = `
+
+                        <div class="category-icon">
+                            ${category.icon}
+                        </div>
+
+                        <h3>
+                            ${category.name}
+                        </h3>
+
+                        <p>
+                            ${category.description}
+                        </p>
+
+                    `;
+
+
+                    grid.appendChild(card);
+
+                });
+
+            }
+
+        }
+
+
+        // OPEN PRODUCTS
+        function openProducts(mainCategory, subCategory) {
+
+            window.location.href =
+                "product.html?category=" +
+                encodeURIComponent(subCategory) +
+                "&gender=" +
+                encodeURIComponent(mainCategory);
+
+        }
+
+
+        // SEARCH
+        function searchCategory() {
+
+            const searchValue =
+                document
+                .getElementById("searchInput")
+                .value
+                .toLowerCase();
+
+
+            const cards =
+                document.querySelectorAll(
+                    ".category-card"
+                );
+
+
+            cards.forEach(function(card) {
+
+                const categoryName =
+                    card.getAttribute("data-name");
+
+
+                if (
+                    categoryName.includes(searchValue)
+                ) {
+
+                    card.style.display =
+                        "block";
+
+                } else {
+
+                    card.style.display =
+                        "none";
+
+                }
+
+            });
+
+        }
+
+
+        // HOME
+        function goHome() {
+
+            window.location.href =
+                "home.html";
+
+        }
+
+
+        // CART
+        function openCart() {
+
+            window.location.href =
+                "cart.html";
+
+        }
+
+
+        // LOAD PAGE
+        showCategories();
+
+    </script>
+
+</body>
+</html>
+

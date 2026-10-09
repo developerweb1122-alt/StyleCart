@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StyleCart - My Wishlist</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #fff7fa;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, #ff4f81, #ff80ab);
+            color: white;
+            padding: 18px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-buttons button {
+            border: none;
+            background: white;
+            color: #ff4081;
+            padding: 10px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #e91e63;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 30px;
+        }
+
+        #wishlistContainer {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 22px;
+        }
+
+        .wishlist-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            text-align: center;
+            position: relative;
+        }
+
+        .product-image {
+            font-size: 80px;
+            background: #fff0f5;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .product-name {
+            font-size: 19px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .category {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .price {
+            color: #e91e63;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .buttons button {
+            border: none;
+            padding: 11px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .view-btn {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+
+        .cart-btn {
+            background: #e91e63;
+            color: white;
+        }
+
+        .remove-btn {
+            background: #eee;
+            color: #555;
+        }
+
+        .empty {
+            background: white;
+            padding: 50px 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .empty-icon {
+            font-size: 70px;
+            margin-bottom: 15px;
+        }
+
+        .empty h2 {
+            color: #e91e63;
+            margin-bottom: 10px;
+        }
+
+        .shop-btn {
+            margin-top: 20px;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            background: #e91e63;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">StyleCart</div>
+
+    <div class="header-buttons">
+        <button onclick="goHome()">🏠 Home</button>
+        <button onclick="goProducts()">🛍 Products</button>
+        <button onclick="goCart()">🛒 Cart</button>
+    </div>
+</header>
+
+<div class="container">
+
+    <h1>❤️ My Wishlist</h1>
+    <p class="subtitle">Your favourite products saved in one place</p>
+
+    <div id="wishlistContainer"></div>
+
+</div>
+
+<script>
+
+    const productInfo = {
+
+        "men-shirt": {
+            name: "Men Casual Shirt",
+            category: "Men - Shirts",
+            price: 799,
+            image: "👔"
+        },
+
+        "men-tshirt": {
+            name: "Men Premium T-Shirt",
+            category: "Men - T-Shirts",
+            price: 499,
+            image: "👕"
+        },
+
+        "men-jeans": {
+            name: "Men Blue Denim Jeans",
+            category: "Men - Jeans",
+            price: 1199,
+            image: "👖"
+        },
+
+        "men-jacket": {
+            name: "Men Stylish Jacket",
+            category: "Men - Jackets",
+            price: 1499,
+            image: "🧥"
+        },
+
+        "women-dress": {
+            name: "Women Floral Dress",
+            category: "Women - Dresses",
+            price: 999,
+            image: "👗"
+        },
+
+        "women-kurti": {
+            name: "Women Stylish Kurti",
+            category: "Women - Kurtis",
+            price: 699,
+            image: "👚"
+        },
+
+        "women-tshirt": {
+            name: "Women Casual T-Shirt",
+            category: "Women - T-Shirts",
+            price: 549,
+            image: "👕"
+        },
+
+        "women-jeans": {
+            name: "Women Denim Jeans",
+            category: "Women - Jeans",
+            price: 1099,
+            image: "👖"
+        },
+
+        "kids-tshirt": {
+            name: "Kids Casual T-Shirt",
+            category: "Kids - T-Shirts",
+            price: 399,
+            image: "👕"
+        },
+
+        "kids-jeans": {
+            name: "Kids Denim Jeans",
+            category: "Kids - Jeans",
+            price: 599,
+            image: "👖"
+        },
+
+        "kids-dress": {
+            name: "Kids Cute Dress",
+            category: "Kids - Dresses",
+            price: 699,
+            image: "👗"
+        },
+
+        "kids-jacket": {
+            name: "Kids Winter Jacket",
+            category: "Kids - Jackets",
+            price: 899,
+            image: "🧥"
+        }
+    };
+
+
+    function loadWishlist() {
+
+        const container = document.getElementById("wishlistContainer");
+
+        let wishlist =
+            JSON.parse(localStorage.getItem("wishlist")) || [];
+
+        container.innerHTML = "";
+
+        if (wishlist.length === 0) {
+
+            container.innerHTML = `
+                <div class="empty">
+
+                    <div class="empty-icon">💔</div>
+
+                    <h2>Your Wishlist is Empty</h2>
+
+                    <p>
+                        Save your favourite products here
+                        and shop them later.
+                    </p>
+
+                    <button
+                        class="shop-btn"
+                        onclick="goProducts()">
+                        Start Shopping
+                    </button>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        wishlist.forEach(function(productId) {
+
+            const product = productInfo[productId];
+
+            if (!product) return;
+
+            const card = document.createElement("div");
+
+            card.className = "wishlist-card";
+
+            card.innerHTML = `
+
+                <div class="product-image">
+                    ${product.image}
+                </div>
+
+                <div class="product-name">
+                    ${product.name}
+                </div>
+
+                <div class="category">
+                    ${product.category}
+                </div>
+
+                <div class="price">
+                    ₹${product.price}
+                </div>
+
+                <div class="buttons">
+
+                    <button
+                        class="view-btn"
+                        onclick="viewProduct('${productId}')">
+                        👁 View Details
+                    </button>
+
+                    <button
+                        class="cart-btn"
+                        onclick="addToCart('${productId}')">
+                        🛒 Add to Cart
+                    </button>
+
+                    <button
+                        class="remove-btn"
+                        onclick="removeFromWishlist('${productId}')">
+                        ❌ Remove
+                    </button>
+
+                </div>
+            `;
+
+            container.appendChild(card);
+        });
+    }
+
+
+    function viewProduct(productId) {
+
+        window.location.href =
+            "productdetails.html?product=" +
+            encodeURIComponent(productId);
+    }
+
+
+    function addToCart(productId) {
+
+        const product = productInfo[productId];
+
+        if (!product) return;
+
+        let cart =
+            JSON.parse(localStorage.getItem("cart")) || [];
+
+        let existingItem = cart.find(function(item) {
+
+            return item.id === productId &&
+                   item.size === "M";
+
+        });
+
+
+        if (existingItem) {
+
+            existingItem.quantity += 1;
+
+        } else {
+
+            cart.push({
+
+                id: productId,
+
+                name: product.name,
+
+                price: product.price,
+
+                size: "M",
+
+                quantity: 1
+            });
+        }
+
+
+        localStorage.setItem(
+            "cart",
+            JSON.stringify(cart)
+        );
+
+
+        alert(
+            product.name +
+            " added to cart!"
+        );
+    }
+
+
+    function removeFromWishlist(productId) {
+
+        let wishlist =
+            JSON.parse(localStorage.getItem("wishlist")) || [];
+
+        wishlist = wishlist.filter(function(id) {
+
+            return id !== productId;
+
+        });
+
+
+        localStorage.setItem(
+            "wishlist",
+            JSON.stringify(wishlist)
+        );
+
+
+        loadWishlist();
+    }
+
+
+    function goHome() {
+
+        window.location.href = "home.html";
+
+    }
+
+
+    function goProducts() {
+
+        window.location.href = "product.html";
+
+    }
+
+
+    function goCart() {
+
+        window.location.href = "cart.html";
+
+    }
+
+
+    loadWishlist();
+
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StyleCart - Admin Login</title>
+
+
+    <style>
+
+        /* =========================
+           RESET
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+
+        /* =========================
+           BODY
+        ========================= */
+
+        body {
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            background: linear-gradient(
+                135deg,
+                #fff1f2,
+                #fce7f3
+            );
+
+        }
+
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
+
+        .container {
+
+            width: 400px;
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 10px 35px rgba(0,0,0,0.12);
+
+        }
+
+
+        /* =========================
+           LOGO
+        ========================= */
+
+        .logo {
+
+            text-align: center;
+
+            color: #e11d48;
+
+            font-size: 32px;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        /* =========================
+           TITLE
+        ========================= */
+
+        .title {
+
+            text-align: center;
+
+            font-size: 22px;
+
+            color: #333;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .subtitle {
+
+            text-align: center;
+
+            font-size: 14px;
+
+            color: #777;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        /* =========================
+           INPUT GROUP
+        ========================= */
+
+        .input-group {
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .input-group label {
+
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            color: #333;
+
+        }
+
+
+        /* =========================
+           INPUT
+        ========================= */
+
+        .input-box {
+
+            position: relative;
+
+        }
+
+
+        .input-box input {
+
+            width: 100%;
+
+            padding: 13px 14px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 10px;
+
+            outline: none;
+
+            font-size: 14px;
+
+            transition: 0.3s;
+
+        }
+
+
+        .input-box.password input {
+
+            padding-right: 55px;
+
+        }
+
+
+        .input-box input:focus {
+
+            border-color: #e11d48;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(225,29,72,0.08);
+
+        }
+
+
+        /* =========================
+           SHOW PASSWORD
+        ========================= */
+
+        .show-password {
+
+            position: absolute;
+
+            right: 13px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            font-size: 13px;
+
+            color: #777;
+
+            cursor: pointer;
+
+        }
+
+
+        .show-password:hover {
+
+            color: #e11d48;
+
+        }
+
+
+        /* =========================
+           FORGOT PASSWORD
+        ========================= */
+
+        .forgot-password {
+
+            text-align: right;
+
+            margin-top: -8px;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .forgot-password a {
+
+            color: #e11d48;
+
+            font-size: 13px;
+
+            text-decoration: none;
+
+            cursor: pointer;
+
+        }
+
+
+        .forgot-password a:hover {
+
+            text-decoration: underline;
+
+        }
+
+
+        /* =========================
+           BUTTON
+        ========================= */
+
+        .btn {
+
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #e11d48;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+
+        }
+
+
+        .btn:hover {
+
+            background: #be123c;
+
+        }
+
+
+        .btn:active {
+
+            transform: scale(0.98);
+
+        }
+
+
+        /* =========================
+           ERROR
+        ========================= */
+
+        .error {
+
+            display: none;
+
+            background: #fee2e2;
+
+            color: #b91c1c;
+
+            padding: 10px;
+
+            border-radius: 8px;
+
+            font-size: 13px;
+
+            text-align: center;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        /* =========================
+           SUCCESS
+        ========================= */
+
+        .success {
+
+            display: none;
+
+            background: #dcfce7;
+
+            color: #15803d;
+
+            padding: 10px;
+
+            border-radius: 8px;
+
+            font-size: 13px;
+
+            text-align: center;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        /* =========================
+           BACK TO LOGIN
+        ========================= */
+
+        .back-login {
+
+            display: block;
+
+            text-align: center;
+
+            margin-top: 20px;
+
+            color: #e11d48;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            cursor: pointer;
+
+        }
+
+
+        .back-login:hover {
+
+            text-decoration: underline;
+
+        }
+
+
+        /* =========================
+           BACK HOME
+        ========================= */
+
+        .back-home {
+
+            display: block;
+
+            text-align: center;
+
+            margin-top: 18px;
+
+            color: #555;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+        }
+
+
+        .back-home:hover {
+
+            color: #e11d48;
+
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+
+            text-align: center;
+
+            margin-top: 20px;
+
+            font-size: 12px;
+
+            color: #999;
+
+        }
+
+
+        /* =========================
+           HIDE RESET FORM
+        ========================= */
+
+        #forgotBox {
+
+            display: none;
+
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media(max-width:480px) {
+
+            .container {
+
+                width: 90%;
+
+                padding: 28px 22px;
+
+            }
+
+
+            .logo {
+
+                font-size: 28px;
+
+            }
+
+
+            .title {
+
+                font-size: 20px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="container">
+
+
+        <!-- =====================================
+             LOGO
+        ====================================== -->
+
+        <div class="logo">
+
+            StyleCart
+
+        </div>
+
+
+
+        <!-- =====================================
+             LOGIN BOX
+        ====================================== -->
+
+        <div id="loginBox">
+
+
+            <div class="title">
+
+                Admin Login
+
+            </div>
+
+
+            <div class="subtitle">
+
+                Login to manage your StyleCart store
+
+            </div>
+
+
+
+            <form id="loginForm">
+
+
+                <!-- EMAIL -->
+
+                <div class="input-group">
+
+                    <label>
+
+                        Admin Email
+
+                    </label>
+
+
+                    <div class="input-box">
+
+                        <input
+                            type="email"
+                            id="adminEmail"
+                            placeholder="Enter admin email"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PASSWORD -->
+
+                <div class="input-group">
+
+                    <label>
+
+                        Password
+
+                    </label>
+
+
+                    <div class="input-box password">
+
+                        <input
+                            type="password"
+                            id="adminPassword"
+                            placeholder="Enter password"
+                            required
+                        >
+
+
+                        <span
+                            class="show-password"
+                            onclick="toggleLoginPassword()"
+                            id="loginShowPassword"
+                        >
+
+                            Show
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- FORGOT PASSWORD -->
+
+                <div class="forgot-password">
+
+                    <a onclick="showForgotPassword()">
+
+                        Forgot Password?
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- ERROR -->
+
+                <div
+                    class="error"
+                    id="loginError"
+                >
+
+                    Invalid admin email or password.
+
+                </div>
+
+
+
+                <!-- SUCCESS -->
+
+                <div
+                    class="success"
+                    id="loginSuccess"
+                >
+
+                    Login successful! Opening dashboard...
+
+                </div>
+
+
+
+                <!-- LOGIN BUTTON -->
+
+                <button
+                    type="submit"
+                    class="btn"
+                >
+
+                    Login to Admin Panel
+
+                </button>
+
+
+            </form>
+
+
+            <!-- BACK HOME -->
+
+            <a
+               href="../customer/home.html" 
+                class="back-home"
+            >
+
+                ← Back to StyleCart
+
+            </a>
+
+
+        </div>
+
+
+
+        <!-- =====================================
+             FORGOT PASSWORD BOX
+        ====================================== -->
+
+        <div id="forgotBox">
+
+
+            <div class="title">
+
+                Reset Password
+
+            </div>
+
+
+            <div class="subtitle">
+
+                Create a new password for your admin account
+
+            </div>
+
+
+
+            <form id="resetForm">
+
+
+                <!-- EMAIL -->
+
+                <div class="input-group">
+
+                    <label>
+
+                        Admin Email
+
+                    </label>
+
+
+                    <div class="input-box">
+
+                        <input
+                            type="email"
+                            id="resetEmail"
+                            placeholder="Enter admin email"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- NEW PASSWORD -->
+
+                <div class="input-group">
+
+                    <label>
+
+                        New Password
+
+                    </label>
+
+
+                    <div class="input-box password">
+
+                        <input
+                            type="password"
+                            id="newPassword"
+                            placeholder="Enter new password"
+                            required
+                            minlength="6"
+                        >
+
+
+                        <span
+                            class="show-password"
+                            onclick="toggleNewPassword()"
+                            id="newShowPassword"
+                        >
+
+                            Show
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- CONFIRM PASSWORD -->
+
+                <div class="input-group">
+
+                    <label>
+
+                        Confirm Password
+
+                    </label>
+
+
+                    <div class="input-box password">
+
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            placeholder="Confirm new password"
+                            required
+                            minlength="6"
+                        >
+
+
+                        <span
+                            class="show-password"
+                            onclick="toggleConfirmPassword()"
+                            id="confirmShowPassword"
+                        >
+
+                            Show
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- RESET ERROR -->
+
+                <div
+                    class="error"
+                    id="resetError"
+                >
+
+                    Please check your details.
+
+                </div>
+
+
+
+                <!-- RESET SUCCESS -->
+
+                <div
+                    class="success"
+                    id="resetSuccess"
+                >
+
+                    Password reset successfully!
+
+                </div>
+
+
+
+                <!-- RESET BUTTON -->
+
+                <button
+                    type="submit"
+                    class="btn"
+                >
+
+                    Reset Password
+
+                </button>
+
+
+            </form>
+
+
+
+            <!-- BACK LOGIN -->
+
+            <a
+                class="back-login"
+                onclick="showLogin()"
+            >
+
+                ← Back to Admin Login
+
+            </a>
+
+
+        </div>
+
+
+
+        <!-- FOOTER -->
+
+        <div class="footer">
+
+            © 2026 StyleCart Admin Panel
+
+        </div>
+
+
+    </div>
+
+
+
+    <script>
+
+
+        /* =====================================
+           DEFAULT ADMIN DETAILS
+        ====================================== */
+
+        let adminEmail =
+            localStorage.getItem("stylecartAdminEmail")
+            || "admin@stylecart.com";
+
+
+        let adminPassword =
+            localStorage.getItem("stylecartAdminPassword")
+            || "admin123";
+
+
+
+        /* =====================================
+           SHOW FORGOT PASSWORD
+        ====================================== */
+
+        function showForgotPassword() {
+
+            document.getElementById("loginBox")
+                .style.display = "none";
+
+
+            document.getElementById("forgotBox")
+                .style.display = "block";
+
+
+            document.getElementById("resetError")
+                .style.display = "none";
+
+
+            document.getElementById("resetSuccess")
+                .style.display = "none";
+
+        }
+
+
+
+        /* =====================================
+           SHOW LOGIN
+        ====================================== */
+
+        function showLogin() {
+
+            document.getElementById("forgotBox")
+                .style.display = "none";
+
+
+            document.getElementById("loginBox")
+                .style.display = "block";
+
+
+            document.getElementById("resetForm")
+                .reset();
+
+        }
+
+
+
+        /* =====================================
+           LOGIN PASSWORD SHOW / HIDE
+        ====================================== */
+
+        function toggleLoginPassword() {
+
+            const password =
+                document.getElementById(
+                    "adminPassword"
+                );
+
+
+            const button =
+                document.getElementById(
+                    "loginShowPassword"
+                );
+
+
+            if(password.type === "password") {
+
+                password.type = "text";
+
+                button.textContent = "Hide";
+
+            }
+
+            else {
+
+                password.type = "password";
+
+                button.textContent = "Show";
+
+            }
+
+        }
+
+
+
+        /* =====================================
+           NEW PASSWORD SHOW / HIDE
+        ====================================== */
+
+        function toggleNewPassword() {
+
+            const password =
+                document.getElementById(
+                    "newPassword"
+                );
+
+
+            const button =
+                document.getElementById(
+                    "newShowPassword"
+                );
+
+
+            if(password.type === "password") {
+
+                password.type = "text";
+
+                button.textContent = "Hide";
+
+            }
+
+            else {
+
+                password.type = "password";
+
+                button.textContent = "Show";
+
+            }
+
+        }
+
+
+
+        /* =====================================
+           CONFIRM PASSWORD SHOW / HIDE
+        ====================================== */
+
+        function toggleConfirmPassword() {
+
+            const password =
+                document.getElementById(
+                    "confirmPassword"
+                );
+
+
+            const button =
+                document.getElementById(
+                    "confirmShowPassword"
+                );
+
+
+            if(password.type === "password") {
+
+                password.type = "text";
+
+                button.textContent = "Hide";
+
+            }
+
+            else {
+
+                password.type = "password";
+
+                button.textContent = "Show";
+
+            }
+
+        }
+
+
+
+        /* =====================================
+           LOGIN
+        ====================================== */
+
+        document
+            .getElementById("loginForm")
+            .addEventListener(
+                "submit",
+                function(event) {
+
+                    event.preventDefault();
+
+
+                    const email =
+                        document
+                            .getElementById("adminEmail")
+                            .value
+                            .trim();
+
+
+                    const password =
+                        document
+                            .getElementById("adminPassword")
+                            .value
+                            .trim();
+
+
+                    const error =
+                        document.getElementById(
+                            "loginError"
+                        );
+
+
+                    const success =
+                        document.getElementById(
+                            "loginSuccess"
+                        );
+
+
+                    error.style.display = "none";
+
+                    success.style.display = "none";
+
+
+                    /* CHECK LOGIN */
+
+                    if(
+                        email === adminEmail &&
+                        password === adminPassword
+                    ) {
+
+
+                        success.style.display =
+                            "block";
+
+
+                        /* SAVE LOGIN STATUS */
+
+                        localStorage.setItem(
+                            "stylecartAdminLoggedIn",
+                            "true"
+                        );
+
+
+                        /* OPEN DASHBOARD */
+
+                        setTimeout(
+                            function() {
+
+                                window.location.href =
+                                    "admindashboard.html";
+
+                            },
+                            1000
+                        );
+
+                    }
+
+                    else {
+
+                        error.style.display =
+                            "block";
+
+                    }
+
+                }
+            );
+
+
+
+        /* =====================================
+           RESET PASSWORD
+        ====================================== */
+
+        document
+            .getElementById("resetForm")
+            .addEventListener(
+                "submit",
+                function(event) {
+
+                    event.preventDefault();
+
+
+                    const email =
+                        document
+                            .getElementById("resetEmail")
+                            .value
+                            .trim();
+
+
+                    const newPassword =
+                        document
+                            .getElementById("newPassword")
+                            .value
+                            .trim();
+
+
+                    const confirmPassword =
+                        document
+                            .getElementById(
+                                "confirmPassword"
+                            )
+                            .value
+                            .trim();
+
+
+                    const error =
+                        document.getElementById(
+                            "resetError"
+                        );
+
+
+                    const success =
+                        document.getElementById(
+                            "resetSuccess"
+                        );
+
+
+                    error.style.display = "none";
+
+                    success.style.display = "none";
+
+
+                    /* CHECK EMAIL */
+
+                    if(email !== adminEmail) {
+
+                        error.textContent =
+                            "Admin email not found.";
+
+                        error.style.display =
+                            "block";
+
+                        return;
+
+                    }
+
+
+                    /* CHECK PASSWORD LENGTH */
+
+                    if(newPassword.length < 6) {
+
+                        error.textContent =
+                            "Password must contain at least 6 characters.";
+
+                        error.style.display =
+                            "block";
+
+                        return;
+
+                    }
+
+
+                    /* CHECK PASSWORD MATCH */
+
+                    if(newPassword !== confirmPassword) {
+
+                        error.textContent =
+                            "Passwords do not match.";
+
+                        error.style.display =
+                            "block";
+
+                        return;
+
+                    }
+
+
+                    /* SAVE NEW PASSWORD */
+
+                    localStorage.setItem(
+                        "stylecartAdminPassword",
+                        newPassword
+                    );
+
+
+                    adminPassword =
+                        newPassword;
+
+
+                    /* SHOW SUCCESS */
+
+                    success.textContent =
+                        "Password reset successfully!";
+
+                    success.style.display =
+                        "block";
+
+
+                    /* CLEAR FORM */
+
+                    document
+                        .getElementById("resetForm")
+                        .reset();
+
+
+                    /* RETURN TO LOGIN */
+
+                    setTimeout(
+                        function() {
+
+                            showLogin();
+
+                        },
+                        1500
+                    );
+
+                }
+            );
+
+    </script>
+
+
+</body>
+
+</html>
+
+

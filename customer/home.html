@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>StyleCart - Home</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+
+        body {
+            background: #fff;
+            color: #333;
+        }
+
+
+        /* ================= NAVBAR ================= */
+
+        nav {
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ff4f81,
+                    #ff7aa2
+                );
+
+            padding: 15px 40px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            color: white;
+
+        }
+
+
+        .logo {
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+
+        .nav-links {
+
+            display: flex;
+
+            gap: 18px;
+
+            align-items: center;
+
+        }
+
+
+        .nav-links a {
+
+            color: white;
+
+            text-decoration: none;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+        }
+
+
+        .nav-links a:hover {
+
+            text-decoration: underline;
+
+        }
+
+
+        /* ================= SEARCH ================= */
+
+        .home-search {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+        }
+
+
+        .home-search input {
+
+            width: 180px;
+
+            padding: 9px 14px;
+
+            border: none;
+
+            border-radius: 20px;
+
+            outline: none;
+
+            font-size: 14px;
+
+        }
+
+
+        .home-search button {
+
+            border: none;
+
+            background: white;
+
+            padding: 9px 12px;
+
+            border-radius: 50%;
+
+            cursor: pointer;
+
+            font-size: 15px;
+
+        }
+
+
+        .home-search button:hover {
+
+            transform: scale(1.05);
+
+        }
+
+
+        /* ================= PROFILE ================= */
+
+        .profile-icon {
+
+            font-size: 23px;
+
+            cursor: pointer;
+
+        }
+
+
+        /* ================= PROMOTIONAL BANNER ================= */
+
+        .promo-banner {
+
+            padding: 30px 40px;
+
+            background: #fff0f5;
+
+        }
+
+
+        .promo-content {
+
+            max-width: 1200px;
+
+            margin: auto;
+
+            min-height: 370px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffd6e3,
+                    #fff1f5
+                );
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 5px 20px
+                rgba(0,0,0,0.08);
+
+        }
+
+
+        .promo-text {
+
+            width: 50%;
+
+            padding: 45px;
+
+        }
+
+
+        .promo-text h1 {
+
+            font-size: 42px;
+
+            color: #e91e63;
+
+            margin-bottom: 12px;
+
+        }
+
+
+        .promo-text h2 {
+
+            font-size: 32px;
+
+            color: #222;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .promo-text p {
+
+            font-size: 18px;
+
+            line-height: 1.6;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .promo-btn {
+
+            background: #e91e63;
+
+            color: white;
+
+            border: none;
+
+            padding: 13px 28px;
+
+            border-radius: 25px;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+        }
+
+
+        .promo-btn:hover {
+
+            background: #c2185b;
+
+        }
+
+
+        .promo-image {
+
+            width: 50%;
+
+            height: 250px;
+
+        }
+
+
+        .promo-image img {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+        }
+
+
+        /* ================= COMMON SECTION ================= */
+
+        section:not(.promo-banner) {
+
+            padding: 45px 40px;
+
+        }
+
+
+        .section-title {
+
+            text-align: center;
+
+            color: #e91e63;
+
+            font-size: 30px;
+
+            margin-bottom: 30px;
+
+        }
+
+
+        /* ================= CONTAINERS ================= */
+
+        .category-container,
+        .product-container,
+        .offer-container {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 25px;
+
+            max-width: 1100px;
+
+            margin: auto;
+
+        }
+
+
+        /* ================= CARDS ================= */
+
+        .category-card,
+        .product-card,
+        .offer-card {
+
+            background: white;
+
+            border-radius: 15px;
+
+            padding: 25px;
+
+            text-align: center;
+
+            box-shadow:
+                0 4px 15px
+                rgba(0,0,0,0.1);
+
+            transition: 0.3s;
+
+            cursor: pointer;
+
+        }
+
+
+        .category-card:hover,
+        .product-card:hover,
+        .offer-card:hover {
+
+            transform: translateY(-6px);
+
+            box-shadow:
+                0 7px 20px
+                rgba(0,0,0,0.15);
+
+        }
+
+
+        .category-card h3,
+        .product-card h3,
+        .offer-card h3 {
+
+            color: #e91e63;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .category-card p,
+        .product-card p,
+        .offer-card p {
+
+            margin-bottom: 12px;
+
+        }
+
+
+        .price {
+
+            font-weight: bold;
+
+            font-size: 18px;
+
+        }
+
+
+        .view-btn {
+
+            background: #e91e63;
+
+            color: white;
+
+            border: none;
+
+            padding: 9px 18px;
+
+            border-radius: 20px;
+
+            cursor: pointer;
+
+        }
+
+
+        .view-btn:hover {
+
+            background: #c2185b;
+
+        }
+
+
+        /* ================= FOOTER ================= */
+
+        footer {
+
+            background: #222;
+
+            color: white;
+
+            text-align: center;
+
+            padding: 25px;
+
+            margin-top: 30px;
+
+        }
+
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 768px) {
+
+            nav {
+
+                padding: 15px 20px;
+
+                flex-direction: column;
+
+                gap: 15px;
+
+            }
+
+
+            .nav-links {
+
+                flex-wrap: wrap;
+
+                justify-content: center;
+
+            }
+
+
+            .home-search {
+
+                order: -1;
+
+            }
+
+
+            .home-search input {
+
+                width: 220px;
+
+            }
+
+
+            .promo-content {
+
+                flex-direction: column;
+
+            }
+
+
+            .promo-text {
+
+                width: 100%;
+
+                text-align: center;
+
+                padding: 30px 20px;
+
+            }
+
+
+            .promo-text h1 {
+
+                font-size: 32px;
+
+            }
+
+
+            .promo-text h2 {
+
+                font-size: 25px;
+
+            }
+
+
+            .promo-image {
+
+                width: 100%;
+
+                height: 250px;
+
+            }
+
+
+            .category-container,
+            .product-container,
+            .offer-container {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav>
+
+
+    <!-- LOGO -->
+
+    <div
+        class="logo"
+        onclick="goHome()"
+    >
+
+        StyleCart
+
+    </div>
+
+
+
+    <div class="nav-links">
+
+
+        <!-- SEARCH -->
+
+        <div class="home-search">
+
+            <input
+                type="text"
+                id="homeSearch"
+                placeholder="Search clothes..."
+                onkeydown="homeSearchKey(event)"
+            >
+
+            <button
+                onclick="searchFromHome()"
+            >
+
+                🔍
+
+            </button>
+
+        </div>
+
+
+        <!-- HOME -->
+
+        <a onclick="goHome()">
+
+            Home
+
+        </a>
+
+
+        <!-- CATEGORIES -->
+
+        <a onclick="goCategories()">
+
+            Categories
+
+        </a>
+
+
+        <!-- NEW ARRIVALS -->
+
+        <a onclick="goNewArrivals()">
+
+            New Arrivals
+
+        </a>
+
+
+        <!-- OFFERS -->
+
+        <a onclick="goOffers()">
+
+            Offers
+
+        </a>
+
+
+        <!-- WISHLIST -->
+
+        <a onclick="goWishlist()">
+
+            ❤️ Wishlist
+
+        </a>
+
+
+        <!-- PROFILE -->
+
+        <span
+            class="profile-icon"
+            onclick="openProfile()"
+            title="My Profile"
+        >
+
+            👤
+
+        </span>
+
+
+        <!-- LOGIN -->
+
+        <a onclick="loginUser()">
+
+            Login
+
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- ================= PROMOTIONAL BANNER ================= -->
+
+<section
+    class="promo-banner"
+    id="home"
+>
+
+
+    <div class="promo-content">
+
+
+        <div class="promo-text">
+
+
+            <h1>
+
+                Big Fashion Sale 🎉
+
+            </h1>
+
+
+            <h2>
+
+                Up to 50% OFF
+
+            </h2>
+
+
+            <p>
+
+                Upgrade your wardrobe with
+                the latest fashion styles
+                at amazing prices.
+
+            </p>
+
+
+            <button
+                class="promo-btn"
+                onclick="goCategories()"
+            >
+
+                Shop Now
+
+            </button>
+
+        </div>
+
+
+
+        <div class="promo-image">
+
+            <img
+                src="promotionalpic.jpg"
+                alt="StyleCart Fashion Promotion"
+            >
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= CATEGORIES ================= -->
+
+<section id="categories">
+
+
+    <h2 class="section-title">
+
+        Shop By Category
+
+    </h2>
+
+
+
+    <div class="category-container">
+
+
+        <!-- MEN -->
+
+        <div
+            class="category-card"
+            onclick="categorySelected('Men')"
+        >
+
+            <h3>
+
+                👔 Men
+
+            </h3>
+
+
+            <p>
+
+                Stylish clothes for men
+
+            </p>
+
+
+            <button class="view-btn">
+
+                View Collection
+
+            </button>
+
+        </div>
+
+
+
+        <!-- WOMEN -->
+
+        <div
+            class="category-card"
+            onclick="categorySelected('Women')"
+        >
+
+            <h3>
+
+                👗 Women
+
+            </h3>
+
+
+            <p>
+
+                Trendy fashion for women
+
+            </p>
+
+
+            <button class="view-btn">
+
+                View Collection
+
+            </button>
+
+        </div>
+
+
+
+        <!-- KIDS -->
+
+        <div
+            class="category-card"
+            onclick="categorySelected('Kids')"
+        >
+
+            <h3>
+
+                🧒 Kids
+
+            </h3>
+
+
+            <p>
+
+                Cute and comfortable kids wear
+
+            </p>
+
+
+            <button class="view-btn">
+
+                View Collection
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= NEW ARRIVALS ================= -->
+
+<section id="new-arrivals">
+
+
+    <h2 class="section-title">
+
+        🆕 New Arrivals
+
+    </h2>
+
+
+
+    <div class="product-container">
+
+
+        <!-- WOMEN -->
+
+        <div
+            class="product-card"
+            onclick="openProduct('Women')"
+        >
+
+            <h3>
+
+                👗 New Women's Collection
+
+            </h3>
+
+
+            <p>
+
+                Latest fashion for women
+
+            </p>
+
+
+            <p class="price">
+
+                Shop Latest
+
+            </p>
+
+
+            <button class="view-btn">
+
+                Shop Now
+
+            </button>
+
+        </div>
+
+
+
+        <!-- MEN -->
+
+        <div
+            class="product-card"
+            onclick="openProduct('Men')"
+        >
+
+            <h3>
+
+                👔 New Men's Collection
+
+            </h3>
+
+
+            <p>
+
+                Latest shirts and fashion
+
+            </p>
+
+
+            <p class="price">
+
+                Shop Latest
+
+            </p>
+
+
+            <button class="view-btn">
+
+                Shop Now
+
+            </button>
+
+        </div>
+
+
+
+        <!-- KIDS -->
+
+        <div
+            class="product-card"
+            onclick="openProduct('Kids')"
+        >
+
+            <h3>
+
+                🧒 New Kids Collection
+
+            </h3>
+
+
+            <p>
+
+                Latest kids fashion
+
+            </p>
+
+
+            <p class="price">
+
+                Shop Latest
+
+            </p>
+
+
+            <button class="view-btn">
+
+                Shop Now
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= OFFERS ================= -->
+
+<section id="offers">
+
+
+    <h2 class="section-title">
+
+        🔥 Special Offers
+
+    </h2>
+
+
+
+    <div class="offer-container">
+
+
+        <!-- 50% -->
+
+        <div
+            class="offer-card"
+            onclick="openOffer(50)"
+        >
+
+            <h3>
+
+                50% OFF
+
+            </h3>
+
+
+            <p>
+
+                Special offer on selected products
+
+            </p>
+
+
+            <button class="view-btn">
+
+                View Offer
+
+            </button>
+
+        </div>
+
+
+
+        <!-- 30% -->
+
+        <div
+            class="offer-card"
+            onclick="openOffer(30)"
+        >
+
+            <h3>
+
+                30% OFF
+
+            </h3>
+
+
+            <p>
+
+                Grab amazing fashion deals
+
+            </p>
+
+
+            <button class="view-btn">
+
+                View Offer
+
+            </button>
+
+        </div>
+
+
+
+        <!-- 20% -->
+
+        <div
+            class="offer-card"
+            onclick="openOffer(20)"
+        >
+
+            <h3>
+
+                20% OFF
+
+            </h3>
+
+
+            <p>
+
+                Limited time fashion offers
+
+            </p>
+
+
+            <button class="view-btn">
+
+                View Offer
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <p>
+
+        © 2026 StyleCart.
+        All Rights Reserved.
+
+    </p>
+
+</footer>
+
+
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script>
+
+
+/* =========================================
+   HOME
+========================================= */
+
+function goHome() {
+
+    window.location.href =
+        "home.html";
+
+}
+
+
+/* =========================================
+   CATEGORIES
+========================================= */
+
+function goCategories() {
+
+    document
+        .getElementById("categories")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+
+}
+
+
+/* =========================================
+   NEW ARRIVALS
+========================================= */
+
+function goNewArrivals() {
+
+    document
+        .getElementById("new-arrivals")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+
+}
+
+
+/* =========================================
+   OFFERS
+========================================= */
+
+function goOffers() {
+
+    document
+        .getElementById("offers")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+
+}
+
+
+/* =========================================
+   WISHLIST
+========================================= */
+
+function goWishlist() {
+
+    window.location.href =
+        "wishlist.html";
+
+}
+
+
+/* =========================================
+   PROFILE
+========================================= */
+
+function openProfile() {
+
+    window.location.href =
+        "profile.html";
+
+}
+
+
+/* =========================================
+   LOGIN
+========================================= */
+
+function loginUser() {
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+/* =========================================
+   CATEGORY FILTER
+========================================= */
+
+function categorySelected(category) {
+
+    window.location.href =
+        "products.html?gender=" +
+        encodeURIComponent(
+            category.toLowerCase()
+        );
+
+}
+
+
+/* =========================================
+   NEW ARRIVALS
+========================================= */
+
+function openProduct(category) {
+
+    window.location.href =
+        "products.html?category=" +
+        encodeURIComponent(
+            category.toLowerCase()
+        );
+
+}
+
+
+/* =========================================
+   OFFERS
+========================================= */
+
+function openOffer(discount) {
+
+    window.location.href =
+        "products.html?offer=" +
+        encodeURIComponent(discount);
+
+}
+
+
+/* =========================================
+   HOME SEARCH
+========================================= */
+
+function searchFromHome() {
+
+    const searchValue =
+        document
+            .getElementById("homeSearch")
+            .value
+            .trim();
+
+
+    if (searchValue === "") {
+
+        alert(
+            "Please enter something to search."
+        );
+
+        return;
+
+    }
+
+
+    window.location.href =
+        "products.html?search=" +
+        encodeURIComponent(
+            searchValue
+        );
+
+}
+
+
+/* =========================================
+   ENTER SEARCH
+========================================= */
+
+function homeSearchKey(event) {
+
+    if (event.key === "Enter") {
+
+        searchFromHome();
+
+    }
+
+}
+
+</script>
+
+
+</body>
+
+</html>

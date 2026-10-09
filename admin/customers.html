@@ -1,0 +1,2031 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StyleCart - Customer Management</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f8f9fb;
+            color: #333;
+        }
+
+        /* =====================================================
+           SIDEBAR
+        ===================================================== */
+
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 20px 15px;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 25px;
+            font-weight: bold;
+            color: #ec4899;
+            margin-bottom: 30px;
+        }
+
+        .menu-title {
+            color: #9ca3af;
+            font-size: 12px;
+            margin: 20px 10px 10px;
+            text-transform: uppercase;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #d1d5db;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #ec4899;
+            color: white;
+        }
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .main {
+            margin-left: 240px;
+            min-height: 100vh;
+        }
+
+        /* =====================================================
+           TOPBAR
+        ===================================================== */
+
+        .topbar {
+            height: 70px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .topbar h2 {
+            font-size: 22px;
+        }
+
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ec4899;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        /* =====================================================
+           CONTENT
+        ===================================================== */
+
+        .content {
+            padding: 30px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+        }
+
+        .page-header p {
+            color: #6b7280;
+            margin-top: 5px;
+        }
+
+        /* =====================================================
+           STATS
+        ===================================================== */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .stat-card h4 {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card h2 {
+            font-size: 28px;
+        }
+
+        .pink {
+            color: #ec4899;
+        }
+
+        .green {
+            color: #16a34a;
+        }
+
+        .red {
+            color: #dc2626;
+        }
+
+        .blue {
+            color: #2563eb;
+        }
+
+        /* =====================================================
+           TOOLBAR
+        ===================================================== */
+
+        .toolbar {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input,
+        .toolbar select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .search-box input:focus,
+        .toolbar select:focus {
+            border-color: #ec4899;
+        }
+
+        .filter-box {
+            width: 180px;
+        }
+
+        /* =====================================================
+           TABLE
+        ===================================================== */
+
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            overflow-x: auto;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th,
+        td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #fafafa;
+            font-size: 14px;
+            color: #555;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        .customer-name {
+            font-weight: bold;
+        }
+
+        .customer-email {
+            color: #777;
+            font-size: 13px;
+            margin-top: 3px;
+        }
+
+        /* =====================================================
+           STATUS
+        ===================================================== */
+
+        .status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .status.active {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .status.blocked {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* =====================================================
+           BUTTONS
+        ===================================================== */
+
+        button {
+            border: none;
+            cursor: pointer;
+            border-radius: 7px;
+            padding: 8px 12px;
+            font-weight: 600;
+        }
+
+        .view-btn {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .block-btn {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .unblock-btn {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        /* =====================================================
+           MODAL
+        ===================================================== */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            width: 500px;
+            max-width: 100%;
+            border-radius: 15px;
+            padding: 25px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+        .detail-row {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            line-height: 1.5;
+        }
+
+        .detail-row strong {
+            display: inline-block;
+            width: 120px;
+        }
+
+        .modal-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        /* =====================================================
+           EMPTY
+        ===================================================== */
+
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #777;
+        }
+
+        /* =====================================================
+           LOADING
+        ===================================================== */
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #777;
+        }
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media(max-width: 900px) {
+
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media(max-width: 650px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                padding: 0 15px;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ===================================================== -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+            StyleCart
+        </div>
+
+
+        <div class="menu-title">
+            Main
+        </div>
+
+
+        <a href="admindashboard.html">
+            📊 Dashboard
+        </a>
+
+
+        <a href="products.html">
+            📦 Products
+        </a>
+
+
+        <a href="categories.html">
+            🗂️ Categories
+        </a>
+
+
+        <a href="orders.html">
+            🛒 Orders
+        </a>
+
+
+        <a href="customers.html" class="active">
+            👥 Customers
+        </a>
+
+
+        <div class="menu-title">
+            Management
+        </div>
+
+
+        <a href="offers.html">
+            🎁 Offers
+        </a>
+
+
+        <a href="inventory.html">
+            📋 Inventory
+        </a>
+
+
+        <a href="returns.html">
+            🔄 Returns & Exchange
+        </a>
+
+
+        <div class="menu-title">
+            Account
+        </div>
+
+
+        <a href="adminprofile.html">
+            👤 Admin Profile
+        </a>
+
+
+        <a href="#" onclick="logout(); return false;">
+            🚪 Logout
+        </a>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ===================================================== -->
+
+    <div class="main">
+
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <h2>
+                Customer Management
+            </h2>
+
+
+            <div class="admin-info">
+
+                <span>
+                    Admin
+                </span>
+
+
+                <div class="admin-avatar">
+                    A
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- CONTENT -->
+
+        <div class="content">
+
+
+            <!-- PAGE HEADER -->
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>
+                        Customers
+                    </h1>
+
+                    <p>
+                        Manage StyleCart customers
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 STATS
+            ================================================= -->
+
+            <div class="stats">
+
+
+                <div class="stat-card">
+
+                    <h4>
+                        Total Customers
+                    </h4>
+
+                    <h2
+                        class="pink"
+                        id="totalCustomers">
+                        0
+                    </h2>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <h4>
+                        Active Customers
+                    </h4>
+
+                    <h2
+                        class="green"
+                        id="activeCustomers">
+                        0
+                    </h2>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <h4>
+                        Blocked Customers
+                    </h4>
+
+                    <h2
+                        class="red"
+                        id="blockedCustomers">
+                        0
+                    </h2>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <h4>
+                        New Customers
+                    </h4>
+
+                    <h2
+                        class="blue"
+                        id="newCustomers">
+                        0
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 SEARCH / FILTER
+            ================================================= -->
+
+            <div class="toolbar">
+
+
+                <div class="search-box">
+
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Search by name, email or phone..."
+                        onkeyup="renderCustomers()">
+
+                </div>
+
+
+                <div class="filter-box">
+
+                    <select
+                        id="statusFilter"
+                        onchange="renderCustomers()">
+
+                        <option value="All">
+                            All Customers
+                        </option>
+
+                        <option value="Active">
+                            Active
+                        </option>
+
+                        <option value="Blocked">
+                            Blocked
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 CUSTOMER TABLE
+            ================================================= -->
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Customer
+                            </th>
+
+                            <th>
+                                Phone
+                            </th>
+
+                            <th>
+                                Join Date
+                            </th>
+
+                            <th>
+                                Orders
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="customerTable">
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="loading">
+
+                                Loading customers...
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         CUSTOMER MODAL
+    ===================================================== -->
+
+    <div
+        class="modal"
+        id="customerModal">
+
+        <div class="modal-content">
+
+
+            <span
+                class="close"
+                onclick="closeModal()">
+
+                ×
+
+            </span>
+
+
+            <h2>
+                Customer Details
+            </h2>
+
+
+            <div id="customerDetails">
+            </div>
+
+
+            <div class="modal-buttons">
+
+                <button
+                    class="view-btn"
+                    onclick="closeModal()">
+
+                    Close
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ===================================================== -->
+
+    <script>
+
+
+        /* =====================================================
+           API URL
+        ===================================================== */
+
+        const API_URL =
+            "http://127.0.0.1:5000";
+
+
+        /* =====================================================
+           CUSTOMER DATA
+        ===================================================== */
+
+        let customers = [];
+
+
+
+        /* =====================================================
+           LOAD CUSTOMERS FROM MYSQL
+        ===================================================== */
+
+        async function loadCustomers() {
+
+
+            const table =
+                document.getElementById(
+                    "customerTable"
+                );
+
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        class="loading">
+
+                        Loading customers...
+
+                    </td>
+
+                </tr>
+
+            `;
+
+
+            try {
+
+
+                const response =
+                    await fetch(
+                        `${API_URL}/api/admin/customers`,
+                        {
+                            method: "GET",
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            }
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                console.log(
+                    "CUSTOMER API RESPONSE:",
+                    result
+                );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        result.message ||
+                        result.error ||
+                        "Unable to load customers"
+                    );
+
+                }
+
+
+                /*
+                BACKEND RESPONSE KE 3 FORMAT HANDLE:
+
+                1.
+                [
+                    {...}
+                ]
+
+                2.
+                {
+                    success:true,
+                    customers:[...]
+                }
+
+                3.
+                {
+                    success:true,
+                    data:[...]
+                }
+                */
+
+
+                if (
+                    Array.isArray(result)
+                ) {
+
+                    customers =
+                        result;
+
+                }
+
+                else if (
+                    Array.isArray(
+                        result.customers
+                    )
+                ) {
+
+                    customers =
+                        result.customers;
+
+                }
+
+                else if (
+                    Array.isArray(
+                        result.data
+                    )
+                ) {
+
+                    customers =
+                        result.data;
+
+                }
+
+                else {
+
+                    customers = [];
+
+                }
+
+
+                /*
+                STATUS STANDARDIZE
+                */
+
+                customers =
+                    customers.map(
+                        customer => {
+
+                            return {
+
+                                ...customer,
+
+                                status:
+                                    normalizeStatus(
+                                        customer.status
+                                    )
+
+                            };
+
+                        }
+                    );
+
+
+                console.log(
+                    "FINAL CUSTOMERS:",
+                    customers
+                );
+
+
+                renderCustomers();
+
+            }
+
+
+            catch (error) {
+
+
+                console.error(
+                    "CUSTOMER LOAD ERROR:",
+                    error
+                );
+
+
+                customers = [];
+
+
+                table.innerHTML = `
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="empty">
+
+                            <strong>
+                                Unable to load customers
+                            </strong>
+
+                            <br><br>
+
+                            ${escapeHTML(
+                                error.message
+                            )}
+
+                            <br><br>
+
+                            Please make sure Flask backend is running.
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+
+                updateStats();
+
+            }
+
+        }
+
+
+
+        /* =====================================================
+           NORMALIZE STATUS
+        ===================================================== */
+
+        function normalizeStatus(status) {
+
+
+            if (!status) {
+
+                return "Active";
+
+            }
+
+
+            const value =
+                String(status)
+                    .trim()
+                    .toLowerCase();
+
+
+            if (
+                value === "blocked" ||
+                value === "block" ||
+                value === "inactive"
+            ) {
+
+                return "Blocked";
+
+            }
+
+
+            return "Active";
+
+        }
+
+
+
+        /* =====================================================
+           RENDER CUSTOMERS
+        ===================================================== */
+
+        function renderCustomers() {
+
+
+            const table =
+                document.getElementById(
+                    "customerTable"
+                );
+
+
+            const searchInput =
+                document.getElementById(
+                    "searchInput"
+                );
+
+
+            const statusFilter =
+                document.getElementById(
+                    "statusFilter"
+                );
+
+
+            const search =
+                searchInput.value
+                    .toLowerCase()
+                    .trim();
+
+
+            const selectedStatus =
+                statusFilter.value;
+
+
+            const filtered =
+                customers.filter(
+                    customer => {
+
+
+                        const name =
+                            String(
+                                customer.full_name ||
+                                ""
+                            ).toLowerCase();
+
+
+                        const email =
+                            String(
+                                customer.email ||
+                                ""
+                            ).toLowerCase();
+
+
+                        const phone =
+                            String(
+                                customer.phone ||
+                                ""
+                            ).toLowerCase();
+
+
+                        const matchesSearch =
+
+                            name.includes(
+                                search
+                            ) ||
+
+                            email.includes(
+                                search
+                            ) ||
+
+                            phone.includes(
+                                search
+                            );
+
+
+                        const customerStatus =
+                            normalizeStatus(
+                                customer.status
+                            );
+
+
+                        const matchesStatus =
+
+                            selectedStatus ===
+                            "All" ||
+
+                            customerStatus ===
+                            selectedStatus;
+
+
+                        return (
+                            matchesSearch &&
+                            matchesStatus
+                        );
+
+                    }
+                );
+
+
+            table.innerHTML = "";
+
+
+            if (
+                filtered.length === 0
+            ) {
+
+
+                table.innerHTML = `
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="empty">
+
+                            No customers found
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+
+                updateStats();
+
+                return;
+
+            }
+
+
+
+            filtered.forEach(
+                customer => {
+
+
+                    const row =
+                        document.createElement(
+                            "tr"
+                        );
+
+
+                    const customerStatus =
+                        normalizeStatus(
+                            customer.status
+                        );
+
+
+                    const formattedDate =
+                        formatDate(
+                            customer.created_at
+                        );
+
+
+                    row.innerHTML = `
+
+                        <td>
+
+                            #${escapeHTML(
+                                customer.user_id
+                            )}
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="customer-name">
+
+                                ${escapeHTML(
+                                    customer.full_name ||
+                                    "-"
+                                )}
+
+                            </div>
+
+
+                            <div class="customer-email">
+
+                                ${escapeHTML(
+                                    customer.email ||
+                                    "-"
+                                )}
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            ${escapeHTML(
+                                customer.phone ||
+                                "-"
+                            )}
+
+                        </td>
+
+
+                        <td>
+
+                            ${formattedDate}
+
+                        </td>
+
+
+                        <td>
+
+                            ${escapeHTML(
+                                customer.orders ||
+                                0
+                            )}
+
+                        </td>
+
+
+                        <td>
+
+                            <span
+                                class="status ${
+                                    customerStatus
+                                        .toLowerCase()
+                                }">
+
+                                ${customerStatus}
+
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+
+                            <button
+                                class="view-btn"
+                                onclick="viewCustomer(
+                                    ${Number(
+                                        customer.user_id
+                                    )}
+                                )">
+
+                                View
+
+                            </button>
+
+
+                            <button
+                                class="${
+                                    customerStatus ===
+                                    "Active"
+
+                                        ? "block-btn"
+
+                                        : "unblock-btn"
+                                }"
+                                onclick="toggleStatus(
+                                    ${Number(
+                                        customer.user_id
+                                    )}
+                                )">
+
+                                ${
+                                    customerStatus ===
+                                    "Active"
+
+                                        ? "Block"
+
+                                        : "Unblock"
+                                }
+
+                            </button>
+
+
+                        </td>
+
+                    `;
+
+
+                    table.appendChild(
+                        row
+                    );
+
+                }
+            );
+
+
+            updateStats();
+
+        }
+
+
+
+        /* =====================================================
+           UPDATE STATS
+        ===================================================== */
+
+        function updateStats() {
+
+
+            const total =
+                customers.length;
+
+
+            const active =
+                customers.filter(
+                    customer =>
+
+                        normalizeStatus(
+                            customer.status
+                        ) === "Active"
+
+                ).length;
+
+
+            const blocked =
+                customers.filter(
+                    customer =>
+
+                        normalizeStatus(
+                            customer.status
+                        ) === "Blocked"
+
+                ).length;
+
+
+
+            const today =
+                new Date();
+
+
+            const newCustomers =
+                customers.filter(
+                    customer => {
+
+
+                        if (
+                            !customer.created_at
+                        ) {
+
+                            return false;
+
+                        }
+
+
+                        const joinDate =
+                            parseDate(
+                                customer.created_at
+                            );
+
+
+                        if (
+                            !joinDate
+                        ) {
+
+                            return false;
+
+                        }
+
+
+                        const difference =
+                            today.getTime() -
+                            joinDate.getTime();
+
+
+                        const days =
+                            difference /
+                            (
+                                1000 *
+                                60 *
+                                60 *
+                                24
+                            );
+
+
+                        return (
+                            days >= 0 &&
+                            days <= 30
+                        );
+
+                    }
+                ).length;
+
+
+
+            document.getElementById(
+                "totalCustomers"
+            ).textContent =
+                total;
+
+
+            document.getElementById(
+                "activeCustomers"
+            ).textContent =
+                active;
+
+
+            document.getElementById(
+                "blockedCustomers"
+            ).textContent =
+                blocked;
+
+
+            document.getElementById(
+                "newCustomers"
+            ).textContent =
+                newCustomers;
+
+        }
+
+
+
+        /* =====================================================
+           VIEW CUSTOMER
+        ===================================================== */
+
+        function viewCustomer(id) {
+
+
+            const customer =
+                customers.find(
+                    c =>
+                        Number(
+                            c.user_id
+                        ) === Number(id)
+                );
+
+
+            if (!customer) {
+
+                alert(
+                    "Customer details not found."
+                );
+
+                return;
+
+            }
+
+
+            const address =
+                customer.address ||
+                customer.shipping_address ||
+                "No address available";
+
+
+            const status =
+                normalizeStatus(
+                    customer.status
+                );
+
+
+            document.getElementById(
+                "customerDetails"
+            ).innerHTML = `
+
+                <div class="detail-row">
+
+                    <strong>ID:</strong>
+
+                    #${escapeHTML(
+                        customer.user_id
+                    )}
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <strong>Name:</strong>
+
+                    ${escapeHTML(
+                        customer.full_name ||
+                        "-"
+                    )}
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <strong>Email:</strong>
+
+                    ${escapeHTML(
+                        customer.email ||
+                        "-"
+                    )}
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <strong>Phone:</strong>
+
+                    ${escapeHTML(
+                        customer.phone ||
+                        "-"
+                    )}
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <strong>Address:</strong>
+
+                    ${escapeHTML(
+                        address
+                    )}
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <strong>Join Date:</strong>
+
+                    ${formatDate(
+                        customer.created_at
+                    )}
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <strong>Total Orders:</strong>
+
+                    ${escapeHTML(
+                        customer.orders ||
+                        0
+                    )}
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <strong>Status:</strong>
+
+                    ${escapeHTML(
+                        status
+                    )}
+
+                </div>
+
+            `;
+
+
+            document.getElementById(
+                "customerModal"
+            ).style.display =
+                "flex";
+
+        }
+
+
+
+        /* =====================================================
+           CLOSE MODAL
+        ===================================================== */
+
+        function closeModal() {
+
+
+            document.getElementById(
+                "customerModal"
+            ).style.display =
+                "none";
+
+        }
+
+
+
+        /* =====================================================
+           BLOCK / UNBLOCK CUSTOMER
+        ===================================================== */
+
+        async function toggleStatus(id) {
+
+
+            const customer =
+                customers.find(
+                    c =>
+                        Number(
+                            c.user_id
+                        ) === Number(id)
+                );
+
+
+            if (!customer) {
+
+                alert(
+                    "Customer not found."
+                );
+
+                return;
+
+            }
+
+
+            const currentStatus =
+                normalizeStatus(
+                    customer.status
+                );
+
+
+            const newStatus =
+                currentStatus === "Active"
+                    ? "Blocked"
+                    : "Active";
+
+
+            const confirmAction =
+                confirm(
+                    `Are you sure you want to ${
+                        newStatus === "Blocked"
+                            ? "block"
+                            : "unblock"
+                    } ${
+                        customer.full_name
+                    }?`
+                );
+
+
+            if (!confirmAction) {
+
+                return;
+
+            }
+
+
+            try {
+
+
+                const response =
+                    await fetch(
+                        `${API_URL}/api/admin/customers/${id}/status`,
+                        {
+
+                            method: "PUT",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json"
+
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    status:
+                                        newStatus
+
+                                })
+
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                console.log(
+                    "STATUS UPDATE RESPONSE:",
+                    result
+                );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        result.message ||
+                        result.error ||
+                        "Status update failed"
+                    );
+
+                }
+
+
+                alert(
+                    result.message ||
+                    "Customer status updated successfully."
+                );
+
+
+                /*
+                MYSQL SE FRESH DATA
+                */
+
+                await loadCustomers();
+
+            }
+
+
+            catch (error) {
+
+
+                console.error(
+                    "STATUS UPDATE ERROR:",
+                    error
+                );
+
+
+                alert(
+                    "Unable to update customer status.\n\n" +
+                    error.message
+                );
+
+            }
+
+        }
+
+
+
+        /* =====================================================
+           PARSE MYSQL DATE
+        ===================================================== */
+
+        function parseDate(dateValue) {
+
+
+            if (!dateValue) {
+
+                return null;
+
+            }
+
+
+            let value =
+                String(
+                    dateValue
+                );
+
+
+            /*
+            MySQL:
+
+            2026-10-08 12:30:00
+
+            Browser ke liye:
+
+            2026-10-08T12:30:00
+            */
+
+            if (
+                value.includes(" ")
+            ) {
+
+                value =
+                    value.replace(
+                        " ",
+                        "T"
+                    );
+
+            }
+
+
+            const date =
+                new Date(value);
+
+
+            if (
+                isNaN(
+                    date.getTime()
+                )
+            ) {
+
+                return null;
+
+            }
+
+
+            return date;
+
+        }
+
+
+
+        /* =====================================================
+           FORMAT DATE
+        ===================================================== */
+
+        function formatDate(
+            dateValue
+        ) {
+
+
+            const date =
+                parseDate(
+                    dateValue
+                );
+
+
+            if (!date) {
+
+                return "-";
+
+            }
+
+
+            return date.toLocaleDateString(
+                "en-IN",
+                {
+
+                    day: "2-digit",
+
+                    month: "2-digit",
+
+                    year: "numeric"
+
+                }
+            );
+
+        }
+
+
+
+        /* =====================================================
+           ESCAPE HTML
+        ===================================================== */
+
+        function escapeHTML(value) {
+
+
+            if (
+                value === null ||
+                value === undefined
+            ) {
+
+                return "";
+
+            }
+
+
+            return String(value)
+
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
+        }
+
+
+
+        /* =====================================================
+           LOGOUT
+        ===================================================== */
+
+        function logout() {
+
+
+            const confirmLogout =
+                confirm(
+                    "Are you sure you want to logout?"
+                );
+
+
+            if (!confirmLogout) {
+
+                return;
+
+            }
+
+
+            localStorage.removeItem(
+                "adminLoggedIn"
+            );
+
+
+            window.location.href =
+                "adminlogin.html";
+
+        }
+
+
+
+        /* =====================================================
+           CLOSE MODAL OUTSIDE CLICK
+        ===================================================== */
+
+        window.onclick =
+            function(event) {
+
+
+                const modal =
+                    document.getElementById(
+                        "customerModal"
+                    );
+
+
+                if (
+                    event.target === modal
+                ) {
+
+                    closeModal();
+
+                }
+
+            };
+
+
+
+        /* =====================================================
+           INITIAL LOAD
+        ===================================================== */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function() {
+
+                loadCustomers();
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

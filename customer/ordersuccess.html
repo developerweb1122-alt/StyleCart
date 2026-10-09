@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StyleCart - Order Successful</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #fff1f2;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .success-box {
+            background: white;
+            width: 90%;
+            max-width: 550px;
+            padding: 45px 30px;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: #22c55e;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+            font-weight: bold;
+        }
+
+        h1 {
+            color: #16a34a;
+            margin-bottom: 12px;
+        }
+
+        p {
+            color: #555;
+            margin: 8px 0;
+        }
+
+        .order-id {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f8f8;
+            border-radius: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+            padding: 13px 22px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .shop-btn {
+            background: #ec4899;
+            color: white;
+        }
+
+        .orders-btn {
+            background: #111827;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="success-box">
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+        <h1>Order Placed Successfully!</h1>
+
+        <p>Thank you for shopping with StyleCart.</p>
+
+        <div class="order-id">
+            Order ID:
+            <span id="orderId">Loading...</span>
+        </div>
+
+        <div class="buttons">
+
+            <button class="shop-btn" onclick="continueShopping()">
+                Continue Shopping
+            </button>
+
+            <button class="orders-btn" onclick="viewOrders()">
+                My Orders
+            </button>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        // Show latest order ID
+        const latestOrder =
+            JSON.parse(localStorage.getItem("latestOrder"));
+
+        if (latestOrder) {
+
+            document.getElementById("orderId").textContent =
+                latestOrder.orderId || "N/A";
+
+        } else {
+
+            document.getElementById("orderId").textContent =
+                "N/A";
+        }
+
+
+        // Continue Shopping
+        function continueShopping() {
+
+            window.location.href = "home.html";
+
+        }
+
+
+        // My Orders
+        function viewOrders() {
+
+            window.location.href = "order.html";
+
+        }
+
+    </script>
+
+</body>
+</html>

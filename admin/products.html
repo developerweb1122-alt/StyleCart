@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>StyleCart - Product Management</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        background: #f8f9fb;
+        color: #333;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+        width: 240px;
+        height: 100vh;
+        background: #ffffff;
+        position: fixed;
+        left: 0;
+        top: 0;
+        border-right: 1px solid #eee;
+        padding: 20px 15px;
+        z-index: 1000;
+    }
+
+    .logo {
+        text-align: center;
+        font-size: 26px;
+        font-weight: bold;
+        color: #e91e63;
+        margin-bottom: 30px;
+    }
+
+    .admin-text {
+        text-align: center;
+        font-size: 13px;
+        color: #777;
+        margin-top: -22px;
+        margin-bottom: 25px;
+    }
+
+    .menu a {
+        display: block;
+        text-decoration: none;
+        color: #555;
+        padding: 13px 15px;
+        margin-bottom: 5px;
+        border-radius: 8px;
+        transition: 0.3s;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+        background: #fce4ec;
+        color: #e91e63;
+    }
+
+    /* MAIN */
+    .main {
+        margin-left: 240px;
+        padding: 25px;
+    }
+
+    .topbar {
+        background: white;
+        padding: 18px 22px;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    }
+
+    .topbar h1 {
+        font-size: 25px;
+        color: #333;
+    }
+
+    .admin-profile {
+        font-size: 14px;
+        color: #666;
+    }
+
+    /* ACTION BAR */
+    .action-bar {
+        background: white;
+        padding: 18px;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    }
+
+    .search-box {
+        flex: 1;
+    }
+
+    .search-box input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        outline: none;
+    }
+
+    .search-box input:focus {
+        border-color: #e91e63;
+    }
+
+    .filter-box {
+        display: flex;
+        gap: 10px;
+    }
+
+    .filter-box select {
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        outline: none;
+    }
+
+    .add-btn {
+        border: none;
+        background: #e91e63;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .add-btn:hover {
+        background: #d81b60;
+    }
+
+    /* PRODUCT TABLE */
+    .table-container {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        overflow-x: auto;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 900px;
+    }
+
+    th {
+        background: #fce4ec;
+        color: #444;
+        padding: 14px;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    td {
+        padding: 14px;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+        vertical-align: middle;
+    }
+
+    tr:hover {
+        background: #fff8fa;
+    }
+
+    .product-img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #eee;
+    }
+
+    .status {
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .active {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .inactive {
+        background: #ffebee;
+        color: #c62828;
+    }
+
+    .action-btn {
+        border: none;
+        padding: 7px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-right: 4px;
+        font-size: 12px;
+    }
+
+    .edit-btn {
+        background: #e3f2fd;
+        color: #1565c0;
+    }
+
+    .delete-btn {
+        background: #ffebee;
+        color: #c62828;
+    }
+
+    /* MODAL */
+    .modal {
+        display: none;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        padding: 20px;
+    }
+
+    .modal-content {
+        background: white;
+        width: 600px;
+        max-width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        border-radius: 14px;
+        padding: 25px;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .modal-header h2 {
+        color: #e91e63;
+    }
+
+    .close {
+        font-size: 28px;
+        cursor: pointer;
+        color: #777;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 7px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 11px;
+        border: 1px solid #ddd;
+        border-radius: 7px;
+        outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: #e91e63;
+    }
+
+    .form-group textarea {
+        height: 80px;
+        resize: vertical;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 15px;
+    }
+
+    .form-row .form-group {
+        flex: 1;
+    }
+
+    .save-btn {
+        width: 100%;
+        padding: 13px;
+        border: none;
+        background: #e91e63;
+        color: white;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 5px;
+    }
+
+    .save-btn:hover {
+        background: #d81b60;
+    }
+
+    .no-products {
+        text-align: center;
+        padding: 40px;
+        color: #888;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+        .sidebar {
+            width: 200px;
+        }
+
+        .main {
+            margin-left: 200px;
+        }
+
+        .action-bar {
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            width: 100%;
+            flex-basis: 100%;
+        }
+    }
+
+    @media (max-width: 700px) {
+        .sidebar {
+            position: relative;
+            width: 100%;
+            height: auto;
+        }
+
+        .main {
+            margin-left: 0;
+        }
+
+        .menu a {
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .topbar {
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+    }
+</style>
+```
+
+</head>
+
+<body>
+
+```
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+    <div class="logo">
+        StyleCart
+    </div>
+
+    <div class="admin-text">
+        Admin Panel
+    </div>
+
+    <div class="menu">
+
+        <a href="admindashboard.html">
+            🏠 Dashboard
+        </a>
+
+        <a href="products.html" class="active">
+            📦 Products
+        </a>
+
+        <a href="categories.html">
+            🗂️ Categories
+        </a>
+
+        <a href="orders.html">
+            🛒 Orders
+        </a>
+
+        <a href="customers.html">
+            👥 Customers
+        </a>
+
+        <a href="offers.html">
+            🏷️ Offers
+        </a>
+
+        <a href="inventory.html">
+            📊 Inventory
+        </a>
+
+        <a href="returnexchange.html">
+            🔄 Returns & Exchange
+        </a>
+
+        <a href="adminprofile.html">
+            👤 Admin Profile
+        </a>
+
+        <a href="#" onclick="logout()">
+            🚪 Logout
+        </a>
+
+    </div>
+</div>
+
+
+<!-- MAIN -->
+<div class="main">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+
+        <h1>Product Management</h1>
+
+        <div class="admin-profile">
+            👤 Admin
+        </div>
+
+    </div>
+
+
+    <!-- ACTION BAR -->
+    <div class="action-bar">
+
+        <div class="search-box">
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="🔍 Search product..."
+                onkeyup="displayProducts()"
+            >
+        </div>
+
+        <div class="filter-box">
+
+            <select id="categoryFilter" onchange="displayProducts()">
+                <option value="all">All Categories</option>
+                <option value="Men">Men</option>
+                <option value="Women">Women</option>
+                <option value="Kids">Kids</option>
+                <option value="Accessories">Accessories</option>
+            </select>
+
+            <select id="statusFilter" onchange="displayProducts()">
+                <option value="all">All Status</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+            </select>
+
+        </div>
+
+        <button class="add-btn" onclick="openAddModal()">
+            + Add Product
+        </button>
+
+    </div>
+
+
+    <!-- PRODUCT TABLE -->
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody id="productTableBody"></tbody>
+
+        </table>
+
+        <div id="noProducts" class="no-products" style="display:none;">
+            No products found.
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ADD / EDIT PRODUCT MODAL -->
+<div class="modal" id="productModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2 id="modalTitle">
+                Add Product
+            </h2>
+
+            <span class="close" onclick="closeModal()">
+                &times;
+            </span>
+
+        </div>
+
+
+        <form id="productForm">
+
+            <input type="hidden" id="productId">
+
+
+            <div class="form-group">
+
+                <label>
+                    Product Name
+                </label>
+
+                <input
+                    type="text"
+                    id="productName"
+                    placeholder="Enter product name"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>
+                        Category
+                    </label>
+
+                    <select id="productCategory" required>
+
+                        <option value="">
+                            Select Category
+                        </option>
+
+                        <option value="Men">
+                            Men
+                        </option>
+
+                        <option value="Women">
+                            Women
+                        </option>
+
+                        <option value="Kids">
+                            Kids
+                        </option>
+
+                        <option value="Accessories">
+                            Accessories
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Price (₹)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="productPrice"
+                        placeholder="Enter price"
+                        min="0"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>
+                        Stock
+                    </label>
+
+                    <input
+                        type="number"
+                        id="productStock"
+                        placeholder="Enter stock"
+                        min="0"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Status
+                    </label>
+
+                    <select id="productStatus">
+
+                        <option value="Active">
+                            Active
+                        </option>
+
+                        <option value="Inactive">
+                            Inactive
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Product Image URL
+                </label>
+
+                <input
+                    type="text"
+                    id="productImage"
+                    placeholder="Paste image URL"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Description
+                </label>
+
+                <textarea
+                    id="productDescription"
+                    placeholder="Enter product description"
+                ></textarea>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="save-btn"
+            >
+                Save Product
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* ================================
+       PRODUCT DATA
+    ================================= */
+
+    let products = JSON.parse(
+        localStorage.getItem("styleCartProducts")
+    ) || [
+
+        {
+            id: 1,
+            name: "Women's Pink Dress",
+            category: "Women",
+            price: 1299,
+            stock: 25,
+            status: "Active",
+            image: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=500",
+            description: "Stylish pink dress for women."
+        },
+
+        {
+            id: 2,
+            name: "Men's Casual Shirt",
+            category: "Men",
+            price: 899,
+            stock: 40,
+            status: "Active",
+            image: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=500",
+            description: "Comfortable casual shirt."
+        },
+
+        {
+            id: 3,
+            name: "Kids Summer T-Shirt",
+            category: "Kids",
+            price: 499,
+            stock: 30,
+            status: "Active",
+            image: "https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=500",
+            description: "Comfortable summer t-shirt for kids."
+        }
+
+    ];
+
+
+    /* ================================
+       SAVE PRODUCTS
+    ================================= */
+
+    function saveProducts() {
+
+        localStorage.setItem(
+            "styleCartProducts",
+            JSON.stringify(products)
+        );
+
+    }
+
+
+    /* ================================
+       DISPLAY PRODUCTS
+    ================================= */
+
+    function displayProducts() {
+
+        const tbody =
+            document.getElementById("productTableBody");
+
+        const noProducts =
+            document.getElementById("noProducts");
+
+        const search =
+            document.getElementById("searchInput")
+            .value
+            .toLowerCase();
+
+        const category =
+            document.getElementById("categoryFilter")
+            .value;
+
+        const status =
+            document.getElementById("statusFilter")
+            .value;
+
+
+        const filteredProducts =
+            products.filter(product => {
+
+                const matchesSearch =
+                    product.name
+                    .toLowerCase()
+                    .includes(search);
+
+                const matchesCategory =
+                    category === "all" ||
+                    product.category === category;
+
+                const matchesStatus =
+                    status === "all" ||
+                    product.status === status;
+
+                return (
+                    matchesSearch &&
+                    matchesCategory &&
+                    matchesStatus
+                );
+
+            });
+
+
+        tbody.innerHTML = "";
+
+
+        if (filteredProducts.length === 0) {
+
+            noProducts.style.display = "block";
+
+            return;
+
+        }
+
+
+        noProducts.style.display = "none";
+
+
+        filteredProducts.forEach(product => {
+
+            const row =
+                document.createElement("tr");
+
+
+            row.innerHTML = `
+
+                <td>
+                    <img
+                        src="${product.image}"
+                        class="product-img"
+                        alt="${product.name}"
+                        onerror="this.src='https://via.placeholder.com/60x60?text=No+Image'"
+                    >
+                </td>
+
+                <td>
+                    <strong>
+                        ${product.name}
+                    </strong>
+                </td>
+
+                <td>
+                    ${product.category}
+                </td>
+
+                <td>
+                    ₹${Number(product.price).toLocaleString("en-IN")}
+                </td>
+
+                <td>
+                    ${product.stock}
+                </td>
+
+                <td>
+
+                    <span class="status ${
+                        product.status === "Active"
+                        ? "active"
+                        : "inactive"
+                    }">
+
+                        ${product.status}
+
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <button
+                        class="action-btn edit-btn"
+                        onclick="editProduct(${product.id})"
+                    >
+                        ✏️ Edit
+                    </button>
+
+                    <button
+                        class="action-btn delete-btn"
+                        onclick="deleteProduct(${product.id})"
+                    >
+                        🗑️ Delete
+                    </button>
+
+                </td>
+
+            `;
+
+            tbody.appendChild(row);
+
+        });
+
+    }
+
+
+    /* ================================
+       OPEN ADD MODAL
+    ================================= */
+
+    function openAddModal() {
+
+        document.getElementById("modalTitle")
+            .textContent = "Add Product";
+
+        document.getElementById("productForm")
+            .reset();
+
+        document.getElementById("productId")
+            .value = "";
+
+        document.getElementById("productModal")
+            .style.display = "flex";
+
+    }
+
+
+    /* ================================
+       CLOSE MODAL
+    ================================= */
+
+    function closeModal() {
+
+        document.getElementById("productModal")
+            .style.display = "none";
+
+    }
+
+
+    /* ================================
+       ADD / UPDATE PRODUCT
+    ================================= */
+
+    document.getElementById("productForm")
+        .addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+
+            const id =
+                document.getElementById("productId")
+                .value;
+
+            const productData = {
+
+                name:
+                    document.getElementById("productName")
+                    .value
+                    .trim(),
+
+                category:
+                    document.getElementById("productCategory")
+                    .value,
+
+                price:
+                    Number(
+                        document.getElementById("productPrice")
+                        .value
+                    ),
+
+                stock:
+                    Number(
+                        document.getElementById("productStock")
+                        .value
+                    ),
+
+                status:
+                    document.getElementById("productStatus")
+                    .value,
+
+                image:
+                    document.getElementById("productImage")
+                    .value
+                    .trim(),
+
+                description:
+                    document.getElementById("productDescription")
+                    .value
+                    .trim()
+
+            };
+
+
+            /* UPDATE */
+
+            if (id) {
+
+                const index =
+                    products.findIndex(
+                        product =>
+                        product.id === Number(id)
+                    );
+
+
+                if (index !== -1) {
+
+                    products[index] = {
+
+                        id: Number(id),
+
+                        ...productData
+
+                    };
+
+                }
+
+            }
+
+            /* ADD */
+
+            else {
+
+                const newProduct = {
+
+                    id: Date.now(),
+
+                    ...productData
+
+                };
+
+                products.push(newProduct);
+
+            }
+
+
+            saveProducts();
+
+            displayProducts();
+
+            closeModal();
+
+            alert("Product saved successfully!");
+
+        });
+
+
+    /* ================================
+       EDIT PRODUCT
+    ================================= */
+
+    function editProduct(id) {
+
+        const product =
+            products.find(
+                product =>
+                product.id === id
+            );
+
+
+        if (!product) return;
+
+
+        document.getElementById("modalTitle")
+            .textContent = "Edit Product";
+
+
+        document.getElementById("productId")
+            .value = product.id;
+
+
+        document.getElementById("productName")
+            .value = product.name;
+
+
+        document.getElementById("productCategory")
+            .value = product.category;
+
+
+        document.getElementById("productPrice")
+            .value = product.price;
+
+
+        document.getElementById("productStock")
+            .value = product.stock;
+
+
+        document.getElementById("productStatus")
+            .value = product.status;
+
+
+        document.getElementById("productImage")
+            .value = product.image;
+
+
+        document.getElementById("productDescription")
+            .value = product.description;
+
+
+        document.getElementById("productModal")
+            .style.display = "flex";
+
+    }
+
+
+    /* ================================
+       DELETE PRODUCT
+    ================================= */
+
+    function deleteProduct(id) {
+
+        const product =
+            products.find(
+                product =>
+                product.id === id
+            );
+
+
+        if (!product) return;
+
+
+        const confirmDelete =
+            confirm(
+                `Are you sure you want to delete "${product.name}"?`
+            );
+
+
+        if (!confirmDelete) return;
+
+
+        products =
+            products.filter(
+                product =>
+                product.id !== id
+            );
+
+
+        saveProducts();
+
+        displayProducts();
+
+        alert("Product deleted successfully!");
+
+    }
+
+
+    /* ================================
+       LOGOUT
+    ================================= */
+
+    function logout() {
+
+        const confirmLogout =
+            confirm(
+                "Are you sure you want to logout?"
+            );
+
+
+        if (confirmLogout) {
+
+            localStorage.removeItem("adminLoggedIn");
+
+            window.location.href =
+                "adminlogin.html";
+
+        }
+
+    }
+
+
+    /* ================================
+       CLOSE MODAL OUTSIDE CLICK
+    ================================= */
+
+    window.onclick = function(event) {
+
+        const modal =
+            document.getElementById("productModal");
+
+
+        if (event.target === modal) {
+
+            closeModal();
+
+        }
+
+    };
+
+
+    /* ================================
+       INITIAL LOAD
+    ================================= */
+
+    displayProducts();
+
+</script>
+```
+
+</body>
+</html>

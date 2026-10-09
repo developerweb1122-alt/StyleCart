@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>StyleCart - Login</title>
+
+<style>
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #fff1f2, #fce7f3);
+    }
+
+    .login-container {
+        width: 400px;
+        background: #fff;
+        padding: 35px;
+        border-radius: 18px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .logo {
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        color: #e11d48;
+        margin-bottom: 8px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #777;
+        margin-bottom: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 17px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 7px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #ddd;
+        border-radius: 9px;
+        outline: none;
+        font-size: 14px;
+        transition: 0.3s;
+    }
+
+    input:focus {
+        border-color: #e11d48;
+        box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.1);
+    }
+
+    .password-box {
+        position: relative;
+    }
+
+    .password-box input {
+        padding-right: 60px;
+    }
+
+    .toggle-password {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        cursor: pointer;
+        color: #e11d48;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .login-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0 20px;
+        font-size: 13px;
+    }
+
+    .remember {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .remember input {
+        width: auto;
+    }
+
+    .forgot-password {
+        color: #e11d48;
+        text-decoration: none;
+    }
+
+    .forgot-password:hover {
+        text-decoration: underline;
+    }
+
+    .login-btn {
+        width: 100%;
+        padding: 13px;
+        border: none;
+        border-radius: 9px;
+        background: #e11d48;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .login-btn:hover {
+        background: #be123c;
+    }
+
+    .error {
+        color: #dc2626;
+        font-size: 12px;
+        margin-top: 5px;
+        display: block;
+    }
+
+    .success {
+        color: #16a34a;
+        text-align: center;
+        margin-top: 15px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .register-text {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .register-text a {
+        color: #e11d48;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .register-text a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+
+        .login-container {
+            width: 90%;
+            padding: 25px;
+        }
+
+    }
+
+</style>
+
+
+</head>
+
+<body>
+
+
+<div class="login-container">
+
+    <div class="logo">
+        StyleCart
+    </div>
+
+    <p class="subtitle">
+        Welcome back! Login to your account
+    </p>
+
+    <form id="loginForm">
+
+        <!-- Email -->
+
+        <div class="form-group">
+
+            <label for="email">
+                Email Address
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter your email"
+            >
+
+            <span
+                class="error"
+                id="emailError">
+            </span>
+
+        </div>
+
+        <!-- Password -->
+
+        <div class="form-group">
+
+            <label for="password">
+                Password
+            </label>
+
+            <div class="password-box">
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter your password"
+                >
+
+                <span
+                    class="toggle-password"
+                    onclick="togglePassword('password', this)"
+                >
+                    Show
+                </span>
+
+            </div>
+
+            <span
+                class="error"
+                id="passwordError">
+            </span>
+
+        </div>
+
+        <!-- Remember + Forgot -->
+
+        <div class="login-options">
+
+            <label class="remember">
+
+                <input
+                    type="checkbox"
+                    id="rememberMe"
+                >
+
+                Remember me
+
+            </label>
+
+            <a
+                href="forgot-password.html"
+                class="forgot-password"
+            >
+                Forgot Password?
+            </a>
+
+        </div>
+
+        <!-- Login Button -->
+
+        <button
+            type="submit"
+            class="login-btn"
+        >
+            Login
+        </button>
+
+        <p
+            class="success"
+            id="successMessage">
+        </p>
+
+    </form>
+
+    <!-- Registration Link -->
+
+    <p class="register-text">
+
+        Don't have an account?
+
+        <a href="registration.html">
+            Create Account
+        </a>
+
+    </p>
+
+</div>
+
+<script>
+
+    const form =
+        document.getElementById("loginForm");
+
+    form.addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+            // Clear previous messages
+
+            document.getElementById(
+                "emailError"
+            ).textContent = "";
+
+            document.getElementById(
+                "passwordError"
+            ).textContent = "";
+
+            document.getElementById(
+                "successMessage"
+            ).textContent = "";
+
+            // Get values
+
+            const email =
+                document.getElementById(
+                    "email"
+                ).value.trim();
+
+            const password =
+                document.getElementById(
+                    "password"
+                ).value;
+
+            const rememberMe =
+                document.getElementById(
+                    "rememberMe"
+                ).checked;
+
+            let isValid = true;
+
+            // Email validation
+
+            if (email === "") {
+
+                document.getElementById(
+                    "emailError"
+                ).textContent =
+                    "Please enter your email.";
+
+                isValid = false;
+
+            } else {
+
+                const emailPattern =
+                    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (!emailPattern.test(email)) {
+
+                    document.getElementById(
+                        "emailError"
+                    ).textContent =
+                        "Please enter a valid email.";
+
+                    isValid = false;
+
+                }
+
+            }
+
+            // Password validation
+
+            if (password === "") {
+
+                document.getElementById(
+                    "passwordError"
+                ).textContent =
+                    "Please enter your password.";
+
+                isValid = false;
+
+            } else if (password.length < 8) {
+
+                document.getElementById(
+                    "passwordError"
+                ).textContent =
+                    "Password must contain at least 8 characters.";
+
+                isValid = false;
+
+            }
+
+            // Stop if validation failed
+
+            if (!isValid) {
+                return;
+            }
+
+            // Connect to Flask Backend
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://127.0.0.1:5000/api/login",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                email: email,
+
+                                password: password
+
+                            })
+
+                        }
+                    );
+
+                const result =
+                    await response.json();
+
+                // Login successful
+
+                if (response.ok) {
+
+                    document.getElementById(
+                        "successMessage"
+                    ).textContent =
+                        result.message;
+
+                    // Save logged-in user
+
+                    localStorage.setItem(
+                        "stylecartUser",
+                        JSON.stringify(
+                            result.user
+                        )
+                    );
+
+                    // Remember email
+
+                    if (rememberMe) {
+
+                        localStorage.setItem(
+                            "rememberEmail",
+                            email
+                        );
+
+                    } else {
+
+                        localStorage.removeItem(
+                            "rememberEmail"
+                        );
+
+                    }
+
+                    // Go to Home page
+
+                    setTimeout(function() {
+
+                        window.location.href =
+                            "home.html";
+
+                    }, 1000);
+
+                }
+
+                // Login failed
+
+                else {
+
+                    document.getElementById(
+                        "passwordError"
+                    ).textContent =
+                        result.message;
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Login Error:",
+                    error
+                );
+
+                document.getElementById(
+                    "successMessage"
+                ).textContent =
+                    "Backend server is not connected.";
+
+            }
+
+        }
+    );
+
+    // Show / Hide Password
+
+    function togglePassword(
+        inputId,
+        element
+    ) {
+
+        const input =
+            document.getElementById(
+                inputId
+            );
+
+        if (input.type === "password") {
+
+            input.type = "text";
+
+            element.textContent = "Hide";
+
+        } else {
+
+            input.type = "password";
+
+            element.textContent = "Show";
+
+        }
+
+    }
+
+    // Remember email
+
+    const savedEmail =
+        localStorage.getItem(
+            "rememberEmail"
+        );
+
+    if (savedEmail) {
+
+        document.getElementById(
+            "email"
+        ).value = savedEmail;
+
+        document.getElementById(
+            "rememberMe"
+        ).checked = true;
+
+    }
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1903 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>StyleCart - Order Management</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f8f9fb;
+    color: #333;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: white;
+    border-right: 1px solid #eee;
+    padding: 20px 15px;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.logo {
+    text-align: center;
+    color: #e91e63;
+    font-size: 27px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.admin-text {
+    text-align: center;
+    color: #777;
+    font-size: 13px;
+    margin-bottom: 28px;
+}
+
+.menu a {
+    display: block;
+    text-decoration: none;
+    color: #555;
+    padding: 13px 15px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.menu a:hover,
+.menu a.active {
+    background: #fce4ec;
+    color: #e91e63;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main {
+    margin-left: 240px;
+    padding: 25px;
+}
+
+.topbar {
+    background: white;
+    padding: 18px 22px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+
+.topbar h1 {
+    font-size: 25px;
+}
+
+.admin-profile {
+    color: #666;
+    font-size: 14px;
+}
+
+/* =========================
+   SUMMARY CARDS
+========================= */
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.summary-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+
+.summary-card h3 {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.summary-card p {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+/* =========================
+   ACTION BAR
+========================= */
+
+.action-bar {
+    background: white;
+    padding: 18px;
+    border-radius: 12px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+
+.search-box {
+    flex: 1;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+}
+
+.search-box input:focus {
+    border-color: #e91e63;
+}
+
+.filter-box select {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.table-container {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    overflow-x: auto;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1000px;
+}
+
+th {
+    background: #fce4ec;
+    padding: 14px;
+    text-align: left;
+    font-size: 14px;
+}
+
+td {
+    padding: 14px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+tr:hover {
+    background: #fff8fa;
+}
+
+/* =========================
+   ORDER STATUS
+========================= */
+
+.status {
+    display: inline-block;
+    padding: 7px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.confirmed {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.shipped {
+    background: #ede7f6;
+    color: #5e35b1;
+}
+
+.delivered {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.cancelled {
+    background: #ffebee;
+    color: #c62828;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.view-btn {
+    border: none;
+    background: #e91e63;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.view-btn:hover {
+    background: #d81b60;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    padding: 20px;
+}
+
+.modal-content {
+    background: white;
+    width: 650px;
+    max-width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 14px;
+    padding: 25px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    color: #e91e63;
+}
+
+.close {
+    font-size: 28px;
+    cursor: pointer;
+    color: #777;
+}
+
+.detail-box {
+    background: #f8f9fb;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.detail-box strong {
+    display: inline-block;
+    width: 140px;
+}
+
+.order-items {
+    margin-top: 20px;
+}
+
+.order-items h3 {
+    margin-bottom: 10px;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.status-select {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    margin-top: 8px;
+}
+
+.update-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: #e91e63;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.update-btn:hover {
+    background: #d81b60;
+}
+
+.payment-btn {
+    background: #673ab7;
+}
+
+.payment-btn:hover {
+    background: #512da8;
+}
+
+.no-data {
+    text-align: center;
+    padding: 35px;
+    color: #888;
+}
+
+.loading {
+    text-align: center;
+    padding: 35px;
+    color: #e91e63;
+    font-weight: bold;
+}
+
+.error-message {
+    text-align: center;
+    padding: 35px;
+    color: #d32f2f;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1100px) {
+
+    .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    .main {
+        margin-left: 0;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .action-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        StyleCart
+    </div>
+
+    <div class="admin-text">
+        Admin Panel
+    </div>
+
+    <div class="menu">
+
+        <a href="admindashboard.html">
+            🏠 Dashboard
+        </a>
+
+        <a href="products.html">
+            📦 Products
+        </a>
+
+        <a href="categories.html">
+            🗂️ Categories
+        </a>
+
+        <a href="orders.html" class="active">
+            🛒 Orders
+        </a>
+
+        <a href="customers.html">
+            👥 Customers
+        </a>
+
+        <a href="offers.html">
+            🏷️ Offers
+        </a>
+
+        <a href="inventory.html">
+            📊 Inventory
+        </a>
+
+        <a href="returnexchange.html">
+            🔄 Returns & Exchange
+        </a>
+
+        <a href="adminprofile.html">
+            👤 Admin Profile
+        </a>
+
+        <a href="#" onclick="logout(); return false;">
+            🚪 Logout
+        </a>
+
+    </div>
+
+</div>
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="main">
+
+    <div class="topbar">
+
+        <h1>
+            Order Management
+        </h1>
+
+        <div class="admin-profile">
+            👤 Admin
+        </div>
+
+    </div>
+
+    <!-- =========================
+         SUMMARY
+    ========================= -->
+
+    <div class="summary-grid">
+
+        <div class="summary-card">
+            <h3>Total Orders</h3>
+            <p id="totalOrders">0</p>
+        </div>
+
+        <div class="summary-card">
+            <h3>Pending Orders</h3>
+            <p id="pendingOrders">0</p>
+        </div>
+
+        <div class="summary-card">
+            <h3>Delivered Orders</h3>
+            <p id="deliveredOrders">0</p>
+        </div>
+
+        <div class="summary-card">
+            <h3>Total Sales</h3>
+            <p id="totalSales">₹0</p>
+        </div>
+
+    </div>
+
+    <!-- =========================
+         SEARCH / FILTER
+    ========================= -->
+
+    <div class="action-bar">
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="🔍 Search by Order ID or Customer..."
+                onkeyup="displayOrders()"
+            >
+
+        </div>
+
+        <div class="filter-box">
+
+            <select
+                id="statusFilter"
+                onchange="displayOrders()"
+            >
+
+                <option value="all">All Status</option>
+                <option value="Pending">Pending</option>
+                <option value="Confirmed">Confirmed</option>
+                <option value="Shipped">Shipped</option>
+                <option value="Delivered">Delivered</option>
+                <option value="Cancelled">Cancelled</option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+    <!-- =========================
+         ORDER TABLE
+    ========================= -->
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Date</th>
+                    <th>Items</th>
+                    <th>Amount</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="orderTableBody"></tbody>
+
+        </table>
+
+        <div id="loading" class="loading">
+            Loading orders...
+        </div>
+
+        <div id="noData" class="no-data" style="display:none;">
+            No orders found.
+        </div>
+
+        <div id="errorMessage" class="error-message" style="display:none;"></div>
+
+    </div>
+
+</div>
+
+<!-- =========================
+     ORDER DETAILS MODAL
+========================= -->
+
+<div class="modal" id="orderModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>Order Details</h2>
+
+            <span class="close" onclick="closeModal()">
+                &times;
+            </span>
+
+        </div>
+
+        <div id="orderDetails"></div>
+
+    </div>
+
+</div>
+
+<script>
+
+/* =========================
+   BACKEND URL
+========================= */
+
+const API_URL = "http://127.0.0.1:5000";
+
+/* =========================
+   ORDERS ARRAY
+========================= */
+
+let orders = [];
+
+/* =========================
+   LOAD ORDERS
+========================= */
+
+async function loadOrders() {
+
+    const loading =
+        document.getElementById("loading");
+
+    const errorMessage =
+        document.getElementById("errorMessage");
+
+    const noData =
+        document.getElementById("noData");
+
+    loading.style.display = "block";
+    errorMessage.style.display = "none";
+    noData.style.display = "none";
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL + "/api/admin/orders"
+            );
+
+        const data =
+            await response.json();
+
+        console.log("ADMIN ORDERS API:", data);
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load orders"
+            );
+
+        }
+
+        /*
+           IMPORTANT FIX:
+
+           Backend response is:
+
+           {
+               success: true,
+               orders: [...]
+           }
+
+           So we must use data.orders
+           instead of checking data directly
+        */
+
+        if (Array.isArray(data)) {
+
+            orders = data;
+
+        } else if (
+            data &&
+            Array.isArray(data.orders)
+        ) {
+
+            orders = data.orders;
+
+        } else {
+
+            orders = [];
+
+        }
+
+        loading.style.display = "none";
+
+        displayOrders();
+
+    } catch (error) {
+
+        console.error(
+            "ADMIN ORDERS ERROR:",
+            error
+        );
+
+        loading.style.display = "none";
+
+        errorMessage.style.display = "block";
+
+        errorMessage.textContent =
+            "Unable to load orders. " +
+            error.message;
+
+    }
+
+}
+
+/* =========================
+   DISPLAY ORDERS
+========================= */
+
+function displayOrders() {
+
+    const tbody =
+        document.getElementById(
+            "orderTableBody"
+        );
+
+    const noData =
+        document.getElementById(
+            "noData"
+        );
+
+    const search =
+        document.getElementById(
+            "searchInput"
+        )
+        .value
+        .toLowerCase()
+        .trim();
+
+    const statusFilter =
+        document.getElementById(
+            "statusFilter"
+        ).value;
+
+    const filteredOrders =
+        orders.filter(order => {
+
+            const orderId =
+                String(
+                    order.order_id || ""
+                )
+                .toLowerCase();
+
+            const customer =
+                String(
+                    order.customer_name || ""
+                )
+                .toLowerCase();
+
+            const matchesSearch =
+                orderId.includes(search) ||
+                customer.includes(search);
+
+            const matchesStatus =
+                statusFilter === "all" ||
+                String(
+                    order.order_status || "Pending"
+                ).toLowerCase() ===
+                statusFilter.toLowerCase();
+
+            return (
+                matchesSearch &&
+                matchesStatus
+            );
+
+        });
+
+    tbody.innerHTML = "";
+
+    if (filteredOrders.length === 0) {
+
+        noData.style.display = "block";
+
+        updateSummary();
+
+        return;
+
+    }
+
+    noData.style.display = "none";
+
+    filteredOrders.forEach(order => {
+
+        /*
+           Backend currently sends items as:
+
+           "Men Denim Jeans x2"
+
+           instead of an array.
+
+           Therefore we handle BOTH formats.
+        */
+
+        let itemCount = 0;
+        let itemDisplay = "No items";
+
+        if (Array.isArray(order.items)) {
+
+            itemCount =
+                order.items.reduce(
+                    function(total, item) {
+
+                        return (
+                            total +
+                            Number(
+                                item.quantity || 0
+                            )
+                        );
+
+                    },
+                    0
+                );
+
+            itemDisplay =
+                order.items
+                    .map(item =>
+                        `${escapeHTML(
+                            item.product_name ||
+                            "Product"
+                        )} x${Number(
+                            item.quantity || 0
+                        )}`
+                    )
+                    .join(", ");
+
+        } else if (
+            typeof order.items === "string" &&
+            order.items.trim() !== ""
+        ) {
+
+            itemDisplay =
+                escapeHTML(order.items);
+
+            const matches =
+                order.items.match(/x(\d+)/gi);
+
+            if (matches) {
+
+                itemCount =
+                    matches.reduce(
+                        function(total, value) {
+
+                            const number =
+                                parseInt(
+                                    value.substring(1),
+                                    10
+                                );
+
+                            return (
+                                total +
+                                (isNaN(number)
+                                    ? 0
+                                    : number)
+                            );
+
+                        },
+                        0
+                    );
+
+            } else {
+
+                itemCount = 1;
+
+            }
+
+        }
+
+        tbody.innerHTML += `
+
+            <tr>
+
+                <td>
+                    <strong>
+                        #${escapeHTML(
+                            String(order.order_id || "")
+                        )}
+                    </strong>
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        order.customer_name ||
+                        "Unknown"
+                    )}
+                    <br>
+                    <small style="color:#777;">
+                        ${escapeHTML(
+                            order.customer_email ||
+                            ""
+                        )}
+                    </small>
+                </td>
+
+                <td>
+                    ${formatDate(
+                        order.order_date
+                    )}
+                </td>
+
+                <td>
+                    <div>
+                        ${itemDisplay}
+                    </div>
+
+                    <small style="color:#777;">
+                        ${itemCount} item(s)
+                    </small>
+                </td>
+
+                <td>
+                    <strong>
+                        ₹${Number(
+                            order.total_amount || 0
+                        ).toLocaleString("en-IN", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        })}
+                    </strong>
+
+                    ${
+                        Number(
+                            order.discount_amount || 0
+                        ) > 0
+                        ? `
+                            <br>
+                            <small style="color:#16a34a;">
+                                Discount: ₹${Number(
+                                    order.discount_amount
+                                ).toLocaleString("en-IN", {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                })}
+                            </small>
+                        `
+                        : ""
+                    }
+                </td>
+
+                <td>
+
+                    ${escapeHTML(
+                        order.payment_method ||
+                        "Not Available"
+                    )}
+
+                    <br>
+
+                    <small style="color:#777;">
+
+                        ${escapeHTML(
+                            order.payment_status ||
+                            "Pending"
+                        )}
+
+                    </small>
+
+                </td>
+
+                <td>
+
+                    <span
+                        class="status ${getStatusClass(
+                            order.order_status
+                        )}"
+                    >
+
+                        ${escapeHTML(
+                            order.order_status ||
+                            "Pending"
+                        )}
+
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <button
+                        class="view-btn"
+                        onclick="viewOrder(${Number(
+                            order.order_id
+                        )})"
+                    >
+                        View
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+    updateSummary();
+
+}
+
+/* =========================
+   STATUS CLASS
+========================= */
+
+function getStatusClass(status) {
+
+    const value =
+        String(
+            status || "Pending"
+        )
+        .toLowerCase();
+
+    if (value === "pending") {
+        return "pending";
+    }
+
+    if (value === "confirmed") {
+        return "confirmed";
+    }
+
+    if (value === "shipped") {
+        return "shipped";
+    }
+
+    if (value === "delivered") {
+        return "delivered";
+    }
+
+    if (value === "cancelled") {
+        return "cancelled";
+    }
+
+    return "";
+
+}
+
+/* =========================
+   DATE FORMAT
+========================= */
+
+function formatDate(date) {
+
+    if (!date) {
+        return "-";
+    }
+
+    const d =
+        new Date(date);
+
+    if (isNaN(d.getTime())) {
+        return String(date);
+    }
+
+    return d.toLocaleDateString(
+        "en-IN",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
+}
+
+/* =========================
+   SUMMARY
+========================= */
+
+function updateSummary() {
+
+    document.getElementById(
+        "totalOrders"
+    ).textContent =
+        orders.length;
+
+    const pending =
+        orders.filter(
+            function(order) {
+
+                return (
+                    String(
+                        order.order_status ||
+                        "Pending"
+                    ).toLowerCase() ===
+                    "pending"
+                );
+
+            }
+        ).length;
+
+    const delivered =
+        orders.filter(
+            function(order) {
+
+                return (
+                    String(
+                        order.order_status ||
+                        ""
+                    ).toLowerCase() ===
+                    "delivered"
+                );
+
+            }
+        ).length;
+
+    const sales =
+        orders
+        .filter(
+            function(order) {
+
+                return (
+                    String(
+                        order.order_status ||
+                        "Pending"
+                    ).toLowerCase() !==
+                    "cancelled"
+                );
+
+            }
+        )
+        .reduce(
+            function(total, order) {
+
+                return (
+                    total +
+                    Number(
+                        order.total_amount || 0
+                    )
+                );
+
+            },
+            0
+        );
+
+    document.getElementById(
+        "pendingOrders"
+    ).textContent =
+        pending;
+
+    document.getElementById(
+        "deliveredOrders"
+    ).textContent =
+        delivered;
+
+    document.getElementById(
+        "totalSales"
+    ).textContent =
+        "₹" +
+        sales.toLocaleString("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+}
+
+/* =========================
+   VIEW ORDER
+========================= */
+
+function viewOrder(id) {
+
+    const order =
+        orders.find(
+            function(order) {
+
+                return (
+                    Number(
+                        order.order_id
+                    ) === Number(id)
+                );
+
+            }
+        );
+
+    if (!order) {
+        return;
+    }
+
+    let itemsHTML = "";
+
+    /*
+       Backend admin API returns items
+       as a string.
+
+       Customer order API may return
+       items as an array.
+
+       Handle both.
+    */
+
+    if (
+        Array.isArray(order.items) &&
+        order.items.length > 0
+    ) {
+
+        itemsHTML =
+            order.items
+            .map(
+                function(item) {
+
+                    const itemTotal =
+                        Number(
+                            item.price || 0
+                        ) *
+                        Number(
+                            item.quantity || 0
+                        );
+
+                    return `
+
+                        <div class="order-item">
+
+                            <span>
+
+                                ${escapeHTML(
+                                    item.product_name ||
+                                    "Product"
+                                )}
+
+                                ×
+
+                                ${Number(
+                                    item.quantity || 0
+                                )}
+
+                            </span>
+
+                            <strong>
+
+                                ₹${itemTotal.toLocaleString(
+                                    "en-IN",
+                                    {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    }
+                                )}
+
+                            </strong>
+
+                        </div>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+    } else if (
+        typeof order.items === "string" &&
+        order.items.trim() !== ""
+    ) {
+
+        itemsHTML = `
+
+            <div class="order-item">
+
+                <span>
+                    ${escapeHTML(order.items)}
+                </span>
+
+            </div>
+
+        `;
+
+    } else {
+
+        itemsHTML = `
+
+            <p style="padding:15px;color:#888;">
+                No products found.
+            </p>
+
+        `;
+
+    }
+
+    document.getElementById(
+        "orderDetails"
+    ).innerHTML = `
+
+        <div class="detail-box">
+
+            <strong>
+                Order ID:
+            </strong>
+
+            #${escapeHTML(
+                String(order.order_id)
+            )}
+
+        </div>
+
+        <div class="detail-box">
+
+            <strong>
+                Customer:
+            </strong>
+
+            ${escapeHTML(
+                order.customer_name ||
+                "Unknown"
+            )}
+
+        </div>
+
+        <div class="detail-box">
+
+            <strong>
+                Email:
+            </strong>
+
+            ${escapeHTML(
+                order.customer_email ||
+                "-"
+            )}
+
+        </div>
+
+        <div class="detail-box">
+
+            <strong>
+                Phone:
+            </strong>
+
+            ${escapeHTML(
+                order.customer_phone ||
+                "-"
+            )}
+
+        </div>
+
+        <div class="detail-box">
+
+            <strong>
+                Address:
+            </strong>
+
+            ${escapeHTML(
+                order.shipping_address ||
+                "-"
+            )}
+
+        </div>
+
+        <div class="detail-box">
+
+            <strong>
+                Date:
+            </strong>
+
+            ${formatDate(
+                order.order_date
+            )}
+
+        </div>
+
+        <div class="detail-box">
+
+            <strong>
+                Payment:
+            </strong>
+
+            ${escapeHTML(
+                order.payment_method ||
+                "Not Available"
+            )}
+
+        </div>
+
+        <div class="detail-box">
+
+            <strong>
+                Payment Status:
+            </strong>
+
+            ${escapeHTML(
+                order.payment_status ||
+                "Pending"
+            )}
+
+        </div>
+
+        ${
+            order.coupon_code
+            ? `
+                <div class="detail-box">
+                    <strong>
+                        Coupon:
+                    </strong>
+                    <span style="color:#16a34a;font-weight:bold;">
+                        ${escapeHTML(
+                            order.coupon_code
+                        )}
+                    </span>
+                </div>
+            `
+            : ""
+        }
+
+        ${
+            Number(
+                order.discount_amount || 0
+            ) > 0
+            ? `
+                <div class="detail-box">
+                    <strong>
+                        Discount:
+                    </strong>
+                    ₹${Number(
+                        order.discount_amount
+                    ).toLocaleString("en-IN", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}
+                </div>
+            `
+            : ""
+        }
+
+        <div class="order-items">
+
+            <h3>
+                Ordered Products
+            </h3>
+
+            ${itemsHTML}
+
+            <div class="order-item">
+
+                <strong>
+                    Total
+                </strong>
+
+                <strong>
+
+                    ₹${Number(
+                        order.total_amount || 0
+                    ).toLocaleString(
+                        "en-IN",
+                        {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }
+                    )}
+
+                </strong>
+
+            </div>
+
+        </div>
+
+        <!-- ORDER STATUS UPDATE -->
+
+        <div style="margin-top:20px;">
+
+            <label>
+                <strong>
+                    Update Order Status
+                </strong>
+            </label>
+
+            <select
+                class="status-select"
+                id="newStatus"
+            >
+
+                <option
+                    value="Pending"
+                    ${
+                        order.order_status ===
+                        "Pending"
+                        ? "selected"
+                        : ""
+                    }
+                >
+                    Pending
+                </option>
+
+                <option
+                    value="Confirmed"
+                    ${
+                        order.order_status ===
+                        "Confirmed"
+                        ? "selected"
+                        : ""
+                    }
+                >
+                    Confirmed
+                </option>
+
+                <option
+                    value="Shipped"
+                    ${
+                        order.order_status ===
+                        "Shipped"
+                        ? "selected"
+                        : ""
+                    }
+                >
+                    Shipped
+                </option>
+
+                <option
+                    value="Delivered"
+                    ${
+                        order.order_status ===
+                        "Delivered"
+                        ? "selected"
+                        : ""
+                    }
+                >
+                    Delivered
+                </option>
+
+                <option
+                    value="Cancelled"
+                    ${
+                        order.order_status ===
+                        "Cancelled"
+                        ? "selected"
+                        : ""
+                    }
+                >
+                    Cancelled
+                </option>
+
+            </select>
+
+            <button
+                class="update-btn"
+                onclick="updateOrderStatus(${Number(
+                    order.order_id
+                )})"
+            >
+                Update Order Status
+            </button>
+
+        </div>
+
+        <!-- PAYMENT STATUS UPDATE -->
+
+        <div style="margin-top:25px;">
+
+            <label>
+                <strong>
+                    Update Payment Status
+                </strong>
+            </label>
+
+            <select
+                class="status-select"
+                id="newPaymentStatus"
+            >
+
+                <option
+                    value="Pending"
+                    ${
+                        (order.payment_status || "Pending") ===
+                        "Pending"
+                        ? "selected"
+                        : ""
+                    }
+                >
+                    Pending
+                </option>
+
+                <option
+                    value="Paid"
+                    ${
+                        order.payment_status ===
+                        "Paid"
+                        ? "selected"
+                        : ""
+                    }
+                >
+                    Paid
+                </option>
+
+                <option
+                    value="Failed"
+                    ${
+                        order.payment_status ===
+                        "Failed"
+                        ? "selected"
+                        : ""
+                    }
+                >
+                    Failed
+                </option>
+
+                <option
+                    value="Refunded"
+                    ${
+                        order.payment_status ===
+                        "Refunded"
+                        ? "selected"
+                        : ""
+                    }
+                >
+                    Refunded
+                </option>
+
+            </select>
+
+            <button
+                class="update-btn payment-btn"
+                onclick="updatePaymentStatus(${Number(
+                    order.order_id
+                )})"
+            >
+                Update Payment Status
+            </button>
+
+        </div>
+
+    `;
+
+    document.getElementById(
+        "orderModal"
+    ).style.display = "flex";
+
+}
+
+/* =========================
+   UPDATE ORDER STATUS
+========================= */
+
+async function updateOrderStatus(id) {
+
+    const statusSelect =
+        document.getElementById(
+            "newStatus"
+        );
+
+    if (!statusSelect) {
+        return;
+    }
+
+    const newStatus =
+        statusSelect.value;
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL +
+                "/api/admin/orders/" +
+                id +
+                "/status",
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        status: newStatus
+                    })
+
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Status update failed"
+            );
+
+        }
+
+        alert(
+            "Order status updated successfully!"
+        );
+
+        closeModal();
+
+        await loadOrders();
+
+    } catch (error) {
+
+        console.error(
+            "STATUS UPDATE ERROR:",
+            error
+        );
+
+        alert(
+            "Unable to update order status.\n\n" +
+            error.message
+        );
+
+    }
+
+}
+
+/* =========================
+   UPDATE PAYMENT STATUS
+========================= */
+
+async function updatePaymentStatus(id) {
+
+    const statusSelect =
+        document.getElementById(
+            "newPaymentStatus"
+        );
+
+    if (!statusSelect) {
+        return;
+    }
+
+    const newStatus =
+        statusSelect.value;
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL +
+                "/api/admin/orders/" +
+                id +
+                "/payment-status",
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        payment_status: newStatus
+                    })
+
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Payment status update failed"
+            );
+
+        }
+
+        alert(
+            "Payment status updated successfully!"
+        );
+
+        closeModal();
+
+        await loadOrders();
+
+    } catch (error) {
+
+        console.error(
+            "PAYMENT STATUS UPDATE ERROR:",
+            error
+        );
+
+        alert(
+            "Unable to update payment status.\n\n" +
+            error.message
+        );
+
+    }
+
+}
+
+/* =========================
+   CLOSE MODAL
+========================= */
+
+function closeModal() {
+
+    document.getElementById(
+        "orderModal"
+    ).style.display = "none";
+
+}
+
+/* =========================
+   OUTSIDE MODAL CLICK
+========================= */
+
+window.onclick =
+    function(event) {
+
+        const modal =
+            document.getElementById(
+                "orderModal"
+            );
+
+        if (
+            event.target === modal
+        ) {
+
+            closeModal();
+
+        }
+
+    };
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHTML(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+/* =========================
+   LOGOUT
+========================= */
+
+function logout() {
+
+    const confirmLogout =
+        confirm(
+            "Are you sure you want to logout?"
+        );
+
+    if (confirmLogout) {
+
+        localStorage.removeItem(
+            "adminLoggedIn"
+        );
+
+        window.location.href =
+            "adminlogin.html";
+
+    }
+
+}
+
+/* =========================
+   START
+========================= */
+
+loadOrders();
+
+</script>
+
+</body>
+
+</html>
+

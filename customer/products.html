@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>StyleCart - Products</title>
+
+<style>
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        background: #fff7f9;
+        color: #333;
+    }
+
+    /* ================= HEADER ================= */
+
+    header {
+        background: linear-gradient(135deg, #ff4d6d, #ff758f);
+        color: white;
+
+        padding: 18px 50px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    nav {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+    }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    nav a:hover {
+        text-decoration: underline;
+    }
+
+    #cartCount {
+        background: white;
+        color: #ff4d6d;
+
+        padding: 2px 7px;
+
+        border-radius: 50%;
+
+        font-size: 12px;
+
+        margin-left: 3px;
+    }
+
+    /* ================= MAIN ================= */
+
+    .container {
+        width: 90%;
+        max-width: 1250px;
+
+        margin: 35px auto;
+    }
+
+    .page-title {
+        text-align: center;
+
+        font-size: 32px;
+
+        color: #222;
+
+        margin-bottom: 30px;
+    }
+
+    /* ================= SEARCH ================= */
+
+    .search-box {
+        background: white;
+
+        padding: 20px;
+
+        border-radius: 12px;
+
+        box-shadow:
+            0 3px 15px rgba(0,0,0,0.07);
+
+        margin-bottom: 25px;
+    }
+
+    .search-box input {
+        width: 100%;
+
+        padding: 13px 15px;
+
+        border: 1px solid #ddd;
+
+        border-radius: 7px;
+
+        font-size: 16px;
+
+        outline: none;
+    }
+
+    .search-box input:focus {
+        border-color: #ff4d6d;
+    }
+
+    /* ================= FILTERS ================= */
+
+    .filters {
+        background: white;
+
+        padding: 20px;
+
+        border-radius: 12px;
+
+        box-shadow:
+            0 3px 15px rgba(0,0,0,0.07);
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(4, 1fr);
+
+        gap: 15px;
+
+        margin-bottom: 30px;
+    }
+
+    .filter-group label {
+        display: block;
+
+        font-size: 14px;
+
+        font-weight: bold;
+
+        margin-bottom: 7px;
+
+        color: #444;
+    }
+
+    .filter-group select {
+        width: 100%;
+
+        padding: 11px;
+
+        border: 1px solid #ddd;
+
+        border-radius: 6px;
+
+        outline: none;
+
+        background: white;
+    }
+
+    .filter-buttons {
+        display: flex;
+
+        gap: 10px;
+
+        align-items: end;
+    }
+
+    .filter-btn {
+        width: 100%;
+
+        padding: 11px;
+
+        border: none;
+
+        border-radius: 6px;
+
+        cursor: pointer;
+
+        font-weight: bold;
+    }
+
+    .apply-btn {
+        background: #ff4d6d;
+        color: white;
+    }
+
+    .clear-btn {
+        background: #eee;
+        color: #333;
+    }
+
+    /* ================= PRODUCT GRID ================= */
+
+    .products-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(4, 1fr);
+
+        gap: 25px;
+    }
+
+    .product-card {
+        background: white;
+
+        border-radius: 12px;
+
+        overflow: hidden;
+
+        box-shadow:
+            0 4px 15px rgba(0,0,0,0.08);
+
+        transition: 0.3s;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+
+        box-shadow:
+            0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .product-image {
+        width: 100%;
+
+        height: 280px;
+
+        object-fit: cover;
+
+        background: #f5f5f5;
+    }
+
+    .product-content {
+        padding: 18px;
+    }
+
+    .product-category {
+        color: #ff4d6d;
+
+        font-size: 12px;
+
+        font-weight: bold;
+
+        text-transform: uppercase;
+
+        margin-bottom: 7px;
+    }
+
+    .product-name {
+        font-size: 18px;
+
+        font-weight: bold;
+
+        color: #222;
+
+        margin-bottom: 10px;
+
+        min-height: 42px;
+    }
+
+    .product-description {
+        color: #777;
+
+        font-size: 13px;
+
+        line-height: 1.5;
+
+        margin-bottom: 10px;
+
+        height: 40px;
+
+        overflow: hidden;
+    }
+
+    .product-price {
+        color: #e11d48;
+
+        font-size: 21px;
+
+        font-weight: bold;
+
+        margin-bottom: 7px;
+    }
+
+    .product-stock {
+        font-size: 13px;
+
+        color: #16a34a;
+
+        margin-bottom: 15px;
+    }
+
+    .out-stock {
+        color: #dc2626;
+    }
+
+    .view-btn {
+        width: 100%;
+
+        padding: 12px;
+
+        background: #ff4d6d;
+
+        color: white;
+
+        border: none;
+
+        border-radius: 7px;
+
+        cursor: pointer;
+
+        font-size: 15px;
+
+        font-weight: bold;
+    }
+
+    .view-btn:hover {
+        background: #e11d48;
+    }
+
+    .view-btn:disabled {
+        background: #aaa;
+
+        cursor: not-allowed;
+    }
+
+    /* ================= LOADING ================= */
+
+    .loading {
+        text-align: center;
+
+        padding: 80px 20px;
+
+        font-size: 20px;
+
+        color: #777;
+    }
+
+    /* ================= ERROR ================= */
+
+    .error-box {
+        background: white;
+
+        padding: 50px 20px;
+
+        text-align: center;
+
+        border-radius: 12px;
+
+        box-shadow:
+            0 3px 15px rgba(0,0,0,0.07);
+    }
+
+    .error-box h2 {
+        color: #dc2626;
+
+        margin-bottom: 12px;
+    }
+
+    .retry-btn {
+        margin-top: 20px;
+
+        padding: 12px 25px;
+
+        background: #ff4d6d;
+
+        color: white;
+
+        border: none;
+
+        border-radius: 7px;
+
+        cursor: pointer;
+
+        font-weight: bold;
+    }
+
+    /* ================= NO PRODUCTS ================= */
+
+    .no-products {
+        grid-column: 1 / -1;
+
+        background: white;
+
+        padding: 60px 20px;
+
+        text-align: center;
+
+        border-radius: 12px;
+
+        color: #777;
+    }
+
+    /* ================= RESPONSIVE ================= */
+
+    @media (max-width: 1000px) {
+
+        .products-grid {
+            grid-template-columns:
+                repeat(3, 1fr);
+        }
+
+        .filters {
+            grid-template-columns:
+                repeat(2, 1fr);
+        }
+
+    }
+
+    @media (max-width: 700px) {
+
+        header {
+            padding: 15px 20px;
+
+            flex-direction: column;
+
+            gap: 15px;
+        }
+
+        nav {
+            gap: 15px;
+
+            flex-wrap: wrap;
+
+            justify-content: center;
+        }
+
+        .products-grid {
+            grid-template-columns:
+                repeat(2, 1fr);
+        }
+
+    }
+
+    @media (max-width: 500px) {
+
+        .products-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .filters {
+            grid-template-columns: 1fr;
+        }
+
+        .page-title {
+            font-size: 26px;
+        }
+
+    }
+
+</style>
+
+
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+<div class="logo">
+    StyleCart
+</div>
+
+<nav>
+
+    <a href="home.html">
+        Home
+    </a>
+
+    <a href="products.html">
+        Products
+    </a>
+
+    <a href="wishlist.html">
+        Wishlist
+    </a>
+
+    <a href="cart.html">
+        Cart
+        <span id="cartCount">0</span>
+    </a>
+
+</nav>
+
+
+</header>
+
+<!-- ================= MAIN ================= -->
+
+<div class="container">
+
+
+<h1 class="page-title">
+    Our Products
+</h1>
+
+
+<!-- SEARCH -->
+
+<div class="search-box">
+
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="Search clothes..."
+        oninput="applyFilters()"
+    >
+
+</div>
+
+
+<!-- FILTERS -->
+
+<div class="filters">
+
+    <!-- CATEGORY -->
+
+    <div class="filter-group">
+
+        <label>
+            Category
+        </label>
+
+        <select id="categoryFilter">
+
+            <option value="all">
+                All Categories
+            </option>
+
+            <option value="men">
+                Men
+            </option>
+
+            <option value="women">
+                Women
+            </option>
+
+            <option value="kids">
+                Kids
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- PRICE -->
+
+    <div class="filter-group">
+
+        <label>
+            Price
+        </label>
+
+        <select id="priceFilter">
+
+            <option value="all">
+                All Prices
+            </option>
+
+            <option value="under500">
+                Under ₹500
+            </option>
+
+            <option value="500-1000">
+                ₹500 - ₹1000
+            </option>
+
+            <option value="1000-1500">
+                ₹1000 - ₹1500
+            </option>
+
+            <option value="above1500">
+                Above ₹1500
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- SORT -->
+
+    <div class="filter-group">
+
+        <label>
+            Sort
+        </label>
+
+        <select id="sortFilter">
+
+            <option value="default">
+                Default
+            </option>
+
+            <option value="priceLow">
+                Price Low to High
+            </option>
+
+            <option value="priceHigh">
+                Price High to Low
+            </option>
+
+            <option value="ratingHigh">
+                Rating High to Low
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- BUTTONS -->
+
+    <div class="filter-buttons">
+
+        <button
+            class="filter-btn apply-btn"
+            onclick="applyFilters()"
+        >
+            Apply
+        </button>
+
+        <button
+            class="filter-btn clear-btn"
+            onclick="clearFilters()"
+        >
+            Clear
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- LOADING -->
+
+<div
+    id="loading"
+    class="loading"
+>
+
+    Loading products...
+
+</div>
+
+
+<!-- ERROR -->
+
+<div
+    id="errorBox"
+    class="error-box"
+    style="display:none;"
+>
+
+    <h2>
+        Unable to Load Products
+    </h2>
+
+    <p>
+        Please make sure StyleCart backend is running.
+    </p>
+
+    <button
+        class="retry-btn"
+        onclick="loadProducts()"
+    >
+        Retry
+    </button>
+
+</div>
+
+
+<!-- PRODUCT GRID -->
+
+<div
+    id="productsGrid"
+    class="products-grid"
+    style="display:none;"
+></div>
+
+
+</div>
+<script>
+
+/* =====================================================
+   GLOBAL PRODUCTS ARRAY
+===================================================== */
+
+let products = [];
+
+
+/* =====================================================
+   LOAD PRODUCTS FROM FLASK + MYSQL
+===================================================== */
+
+async function loadProducts() {
+
+    const loading =
+        document.getElementById("loading");
+
+    const grid =
+        document.getElementById("productsGrid");
+
+    const errorBox =
+        document.getElementById("errorBox");
+
+
+    loading.style.display = "block";
+    grid.style.display = "none";
+    errorBox.style.display = "none";
+
+
+    try {
+
+        const response = await fetch(
+            "http://127.0.0.1:5000/api/products"
+        );
+
+
+        console.log(
+            "Products API Status:",
+            response.status
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Products API failed"
+            );
+
+        }
+
+
+        const data = await response.json();
+
+
+        console.log(
+            "Products received:",
+            data
+        );
+
+
+        /* =================================================
+           IMPORTANT:
+           BACKEND RESPONSE IS:
+           {
+               success: true,
+               products: [...]
+           }
+        ================================================= */
+
+        if (
+            !data ||
+            data.success !== true ||
+            !Array.isArray(data.products)
+        ) {
+
+            throw new Error(
+                "Invalid products data"
+            );
+
+        }
+
+
+        /* =================================================
+           DATABASE PRODUCTS
+        ================================================= */
+
+        products = data.products.map(
+            function(product) {
+
+                return {
+
+                    id:
+                        Number(product.product_id),
+
+                    name:
+                        product.product_name ||
+                        "Product",
+
+                    category:
+                        product.category_name ||
+                        "Fashion",
+
+                    description:
+                        product.description ||
+                        "No description available.",
+
+                    price:
+                        Number(product.price) || 0,
+
+                    discount:
+                        Number(product.discount) || 0,
+
+                    stock:
+                        Number(product.stock) || 0,
+
+                    size:
+                        product.size || "",
+
+                    color:
+                        product.color || "",
+
+                    image:
+                        product.image_url || "",
+
+                    rating:
+                        4.5
+
+                };
+
+            }
+        );
+
+
+        console.log(
+            "Products converted:",
+            products
+        );
+
+
+        loading.style.display = "none";
+
+        grid.style.display = "grid";
+
+
+        displayProducts();
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Products Loading Error:",
+            error
+        );
+
+
+        loading.style.display = "none";
+
+        grid.style.display = "none";
+
+        errorBox.style.display = "block";
+
+    }
+
+}
+
+
+/* =====================================================
+   DISPLAY PRODUCTS
+===================================================== */
+
+function displayProducts() {
+
+    const grid =
+        document.getElementById(
+            "productsGrid"
+        );
+
+
+    const searchText =
+        document.getElementById(
+            "searchInput"
+        )
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const category =
+        document.getElementById(
+            "categoryFilter"
+        ).value;
+
+
+    const price =
+        document.getElementById(
+            "priceFilter"
+        ).value;
+
+
+    const sort =
+        document.getElementById(
+            "sortFilter"
+        ).value;
+
+
+    let filteredProducts =
+        products.filter(
+            function(product) {
+
+
+                /* SEARCH */
+
+                const matchesSearch =
+
+                    product.name
+                        .toLowerCase()
+                        .includes(searchText)
+
+                    ||
+
+                    product.category
+                        .toLowerCase()
+                        .includes(searchText)
+
+                    ||
+
+                    product.description
+                        .toLowerCase()
+                        .includes(searchText);
+
+
+                if (!matchesSearch) {
+
+                    return false;
+
+                }
+
+
+                /* CATEGORY */
+
+                if (
+                    category !== "all" &&
+                    product.category.toLowerCase() !== category
+                ) {
+
+                    return false;
+
+                }
+
+
+                /* PRICE */
+
+                if (price === "under500") {
+
+                    if (product.price >= 500) {
+
+                        return false;
+
+                    }
+
+                }
+
+
+                else if (price === "500-1000") {
+
+                    if (
+                        product.price < 500 ||
+                        product.price > 1000
+                    ) {
+
+                        return false;
+
+                    }
+
+                }
+
+
+                else if (price === "1000-1500") {
+
+                    if (
+                        product.price < 1000 ||
+                        product.price > 1500
+                    ) {
+
+                        return false;
+
+                    }
+
+                }
+
+
+                else if (price === "above1500") {
+
+                    if (product.price <= 1500) {
+
+                        return false;
+
+                    }
+
+                }
+
+
+                return true;
+
+            }
+        );
+
+
+    /* =================================================
+       SORT
+    ================================================= */
+
+    if (sort === "priceLow") {
+
+        filteredProducts.sort(
+            function(a, b) {
+
+                return a.price - b.price;
+
+            }
+        );
+
+    }
+
+
+    else if (sort === "priceHigh") {
+
+        filteredProducts.sort(
+            function(a, b) {
+
+                return b.price - a.price;
+
+            }
+        );
+
+    }
+
+
+    else if (sort === "ratingHigh") {
+
+        filteredProducts.sort(
+            function(a, b) {
+
+                return b.rating - a.rating;
+
+            }
+        );
+
+    }
+
+
+    /* =================================================
+       NO PRODUCTS
+    ================================================= */
+
+    if (
+        filteredProducts.length === 0
+    ) {
+
+        grid.innerHTML = `
+
+            <div class="no-products">
+
+                <h2>
+                    No Products Found
+                </h2>
+
+                <p>
+                    Try changing your search or filters.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    /* =================================================
+       CREATE PRODUCT CARDS
+    ================================================= */
+
+    grid.innerHTML = "";
+
+
+    filteredProducts.forEach(
+        function(product) {
+
+            const card =
+                document.createElement("div");
+
+
+            card.className =
+                "product-card";
+
+
+            /* =================================================
+               IMAGE
+            ================================================= */
+
+            let imageURL =
+                product.image;
+
+
+            if (!imageURL) {
+
+                imageURL =
+                    "https://via.placeholder.com/400x500?text=StyleCart";
+
+            }
+
+
+            /*
+               If MySQL gives:
+               images/men-shirt.jpg
+
+               browser will load it directly if that
+               folder is available to the frontend.
+            */
+
+
+            const stockText =
+                product.stock > 0
+                    ? "✓ In Stock"
+                    : "✕ Out of Stock";
+
+
+            const stockClass =
+                product.stock > 0
+                    ? "product-stock"
+                    : "product-stock out-stock";
+
+
+            card.innerHTML = `
+
+                <img
+                    class="product-image"
+                    src="${imageURL}"
+                    alt="${escapeHTML(product.name)}"
+
+                    onerror="
+                        this.onerror=null;
+                        this.src='https://via.placeholder.com/400x500?text=StyleCart';
+                    "
+                >
+
+
+                <div class="product-content">
+
+
+                    <div class="product-category">
+
+                        ${escapeHTML(product.category)}
+
+                    </div>
+
+
+                    <div class="product-name">
+
+                        ${escapeHTML(product.name)}
+
+                    </div>
+
+
+                    <div class="product-description">
+
+                        ${escapeHTML(product.description)}
+
+                    </div>
+
+
+                    <div class="product-price">
+
+                        ₹${product.price.toFixed(2)}
+
+                    </div>
+
+
+                    <div class="${stockClass}">
+
+                        ${stockText}
+
+                    </div>
+
+
+                    <button
+
+                        class="view-btn"
+
+                        ${
+                            product.stock <= 0
+                                ? "disabled"
+                                : ""
+                        }
+
+                        onclick="openProductDetails(${product.id})"
+
+                    >
+
+                        ${
+                            product.stock <= 0
+                                ? "Out of Stock"
+                                : "View Details"
+                        }
+
+                    </button>
+
+
+                </div>
+
+            `;
+
+
+            grid.appendChild(card);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   OPEN PRODUCT DETAILS
+===================================================== */
+
+function openProductDetails(productId) {
+
+    console.log(
+        "Opening Product ID:",
+        productId
+    );
+
+
+    localStorage.setItem(
+        "selectedProductId",
+        String(productId)
+    );
+
+
+    window.location.href =
+        "productdetails.html";
+
+}
+
+
+/* =====================================================
+   APPLY FILTERS
+===================================================== */
+
+function applyFilters() {
+
+    displayProducts();
+
+}
+
+
+/* =====================================================
+   CLEAR FILTERS
+===================================================== */
+
+function clearFilters() {
+
+    document.getElementById(
+        "searchInput"
+    ).value = "";
+
+
+    document.getElementById(
+        "categoryFilter"
+    ).value = "all";
+
+
+    document.getElementById(
+        "priceFilter"
+    ).value = "all";
+
+
+    document.getElementById(
+        "sortFilter"
+    ).value = "default";
+
+
+    displayProducts();
+
+}
+
+
+/* =====================================================
+   CART COUNT
+===================================================== */
+
+async function updateCartCount() {
+
+    const savedUser =
+        JSON.parse(
+            localStorage.getItem(
+                "stylecartUser"
+            )
+        );
+
+
+    if (!savedUser) {
+
+        document.getElementById(
+            "cartCount"
+        ).textContent = "0";
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `http://127.0.0.1:5000/api/cart/${savedUser.user_id}`
+            );
+
+
+        if (!response.ok) {
+
+            return;
+
+        }
+
+
+        const cart =
+            await response.json();
+
+
+        let count = 0;
+
+
+        /*
+           Backend may return:
+           [ ... ]
+
+           OR:
+           { cart: [ ... ] }
+        */
+
+        const cartItems =
+            Array.isArray(cart)
+                ? cart
+                : cart.cart || [];
+
+
+        cartItems.forEach(
+            function(item) {
+
+                count +=
+                    Number(item.quantity) || 0;
+
+            }
+        );
+
+
+        document.getElementById(
+            "cartCount"
+        ).textContent = count;
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Cart Count Error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(text) {
+
+    return String(text)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   PAGE LOAD
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        loadProducts();
+
+        updateCartCount();
+
+    }
+);
+
+</script>
+
+
+
+       
+                       
+
+     
+
+
+
+      
+
+
+
+</body>
+
+</html>
