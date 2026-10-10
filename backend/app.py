@@ -5,6 +5,9 @@ from mysql.connector import Error
 from decimal import Decimal
 from datetime import date, datetime
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # =========================================================
@@ -20,10 +23,11 @@ CORS(app)
 # =========================================================
 
 DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",
-    "password": "Tanu@12345",
-    "database": "stylecart"
+    "host": os.getenv("MYSQLHOST"),
+    "port": int(os.getenv("MYSQLPORT", "3306")),
+    "user": os.getenv("MYSQLUSER"),
+    "password": os.getenv("MYSQLPASSWORD"),
+    "database": os.getenv("MYSQLDATABASE")
 }
 
 
@@ -3389,7 +3393,8 @@ def internal_server_error(error):
 # RUN SERVER
 # =========================================================
 
-if __name__ == "__main__":
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080)
 
     print()
     print("======================================")
