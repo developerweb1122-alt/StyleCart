@@ -35,18 +35,13 @@ DB_CONFIG = {
 # CUSTOMER FOLDER
 # =========================================================
 
-BASE_FOLDER = os.path.abspath(
-    os.path.join(
-        os.path.dirname(__file__)
-        
-    )
-)
 
-CUSTOMER_FOLDER = os.path.join(
-    BASE_FOLDER,
-    "customer"
-)
 
+# Sahi Base Folder (Current directory)
+BASE_FOLDER = os.path.dirname(os.path.abspath(__file__))
+
+# Sahi Customer Folder path
+CUSTOMER_FOLDER = os.path.join(BASE_FOLDER, "customer")
 
 # =========================================================
 # STARTUP FILE CHECK
