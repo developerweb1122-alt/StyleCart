@@ -37,8 +37,8 @@ DB_CONFIG = {
 
 BASE_FOLDER = os.path.abspath(
     os.path.join(
-        os.path.dirname(__file__),
-        ".."
+        os.path.dirname(__file__)
+        
     )
 )
 
